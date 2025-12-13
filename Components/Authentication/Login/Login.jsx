@@ -1,16 +1,25 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from "../../UI/Button/Button"
-
+import SplashScreen from "../../Screens/SplashScreen/Splashscreen"
 const Login = ({navigation}) => {
+  const[showSplashScreen, setSplashScreen] = useState(true)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  
+  useEffect(() => {
+      setTimeout(() => {
+          setSplashScreen(false);
+      }, 3000);
+  }, [])
 
   const handleCreateAccountBtn = () => {
     navigation.replace("register");
   }
 
-  return (
+  return showSplashScreen ? (
+    <SplashScreen/>
+  ) : (
     <View style={styles.container}>
       <Text style={styles.heading}>Login</Text>
       <View style={styles.horizontalBar}></View>
