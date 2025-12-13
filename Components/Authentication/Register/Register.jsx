@@ -1,6 +1,7 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useState } from 'react'
 import Button from "../../UI/Button/Button"
+import Toast from 'react-native-toast-message'
 
 const Register = ({navigation}) => {
   const [name, setName] = useState("");
@@ -8,6 +9,43 @@ const Register = ({navigation}) => {
     const [CNIC, setCNIC] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+  
+  const handleRegisterBtn = () => {
+    if(!name || !businessName || !CNIC || !email || !password) {
+        Toast.show({
+          type: "error",
+          text1: "Fill all required fields!",
+          topOffset: 60
+        });
+        return;
+    }else if(!email.includes("@") && !email.includes(".com")) {
+      Toast.show({
+          type: "error",
+          text1: "Incorrect Email!",
+          topOffset: 60
+        });
+        return;
+    }else if(!Number(CNIC) || CNIC.length !== 13 || CNIC.includes("-")) {
+      Toast.show({
+          type: "error",
+          text1: "Incorrect CNIC number!",
+          topOffset: 60
+        });
+        return;
+    }else{
+      setName("");
+      setBusinessName("");
+      setCNIC("");
+      setEmail("");
+      setPassword("");
+  
+      Toast.show({
+        type: "success",
+        text1: "Account registered successfully!",
+        topOffset: 60
+      });
+    }
+  }
 
   const handleCreateAccountBtn = () => {
     navigation.replace("login");
@@ -22,8 +60,8 @@ const Register = ({navigation}) => {
         <TextInput value={businessName} onChangeText={(e) => setBusinessName(e)} style={styles.input} placeholder='Enter Business name'/>
         <TextInput value={CNIC} onChangeText={(e) => setCNIC(e)} style={styles.input} placeholder='Enter CNIC'/>
         <TextInput value={email} onChangeText={(e) => setEmail(e)} style={styles.input} placeholder='Enter Email'/>
-        <TextInput value={password} onChangeText={(e) => setPassword(e)} style={styles.input} placeholder='Enter Password'/>
-        <Button title="Register" />
+        <TextInput secureTextEntry={true} value={password} onChangeText={(e) => setPassword(e)} style={styles.input} placeholder='Enter Password'/>
+        <Button onPress={handleRegisterBtn} title="Register" />
         <View style={styles.flex}>
                   <Text>Already have an account? </Text>
                   <Text onPress={handleCreateAccountBtn} style={styles.underline}>Login now</Text>
