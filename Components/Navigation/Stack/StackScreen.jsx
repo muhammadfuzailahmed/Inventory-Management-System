@@ -9,7 +9,7 @@ const StackScreen = () => {
   const Stack = createNativeStackNavigator();
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name='login' component={login}/>
         <Stack.Screen name='register' component={register}/>
     </Stack.Navigator>
