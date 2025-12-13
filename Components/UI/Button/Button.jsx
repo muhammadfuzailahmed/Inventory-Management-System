@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const Button = ({title}) => {
+const Button = ({title, onPress}) => {
   return (
     <View style={styles.btnContainer}>
-      <Text style={styles.btnText}>{title}</Text>
+      <Text onPress={onPress} style={styles.btnText}>{title}</Text>
     </View>
   )
 }
