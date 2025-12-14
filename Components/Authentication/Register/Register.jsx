@@ -35,7 +35,7 @@ const Register = ({ navigation }) => {
       return;
     } else {
 
-      await axios.post("http://172.26.96.1:5000/register", {
+      await axios.post("http://192.168.100.99:5000/register", {
       name,
       businessName,
       CNIC,
