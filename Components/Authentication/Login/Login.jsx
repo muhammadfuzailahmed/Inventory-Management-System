@@ -1,32 +1,60 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Button from "../../UI/Button/Button"
-import SplashScreen from "../../Screens/SplashScreen/Splashscreen"
+import axios from 'axios'
+import Toast from 'react-native-toast-message'
+
 const Login = ({navigation}) => {
-  const[showSplashScreen, setSplashScreen] = useState(true)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   
-  useEffect(() => {
-      setTimeout(() => {
-          setSplashScreen(false);
-      }, 3000);
-  }, [])
+  const handleLoginBtn = async () => {
+      let response = await axios.post("http://192.168.100.99:5000/login", {
+        email,
+        password
+      }).then(() => {
+          console.log("Login Successfull!")
+          console.log(response);
+          Toast.show({
+            type: "success",
+            text1: "Login successfull!"
+          })
+          setEmail("");
+          setPassword("");
+          navigation.replace("bottomTabs");
+      }).catch((error) => {
+        if(error.response) {
+          if(error.response.status === 404) {
+            Toast.show({
+              type: "error",
+              text1: "User not found"
+            })
+          }
+          else if(error.response.status === 401){
+            Toast.show({
+              type: "error",
+              text1: "Incorrect username or password"
+            })
+          }
+        }
+      })
+
+
+
+  }
 
   const handleCreateAccountBtn = () => {
     navigation.replace("register");
   }
 
-  return showSplashScreen ? (
-    <SplashScreen/>
-  ) : (
+  return (
     <View style={styles.container}>
       <Text style={styles.heading}>Login</Text>
       <View style={styles.horizontalBar}></View>
       <View style={styles.formContainer}>
         <TextInput value={email} onChangeText={(e) => setEmail(e)} style={styles.input} placeholder='Enter Email'/>
         <TextInput value={password} onChangeText={(e) => setPassword(e)} style={styles.input} placeholder='Enter Password'/>
-        <Button title="Login"/>
+        <Button onPress={handleLoginBtn} title="Login"/>
         <View style={styles.flex}>
           <Text>Don't have an account? </Text>
           <Text onPress={handleCreateAccountBtn} style={styles.underline}>Create Account</Text>
