@@ -53,6 +53,7 @@ const Register = ({ navigation }) => {
       setCNIC("");
       setEmail("");
       setPassword("");
+      navigation.replace("login");
     }).catch((error) => {
       if (error.response) {
         if (error.response.status === 400) {
