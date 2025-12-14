@@ -9,35 +9,41 @@ const Login = ({navigation}) => {
   const [password, setPassword] = useState("");
   
   const handleLoginBtn = async () => {
+    try {
       let response = await axios.post("http://192.168.100.99:5000/login", {
         email,
         password
-      }).then(() => {
-          console.log("Login Successfull!")
-          console.log(response);
-          Toast.show({
-            type: "success",
-            text1: "Login successfull!"
+      })
+        console.log("Login Successfull!")
+        const {user} = response.data
+        console.log(user);
+        Toast.show({
+          type: "success",
+          text1: "Login successfull!"
           })
           setEmail("");
           setPassword("");
-          navigation.replace("bottomTabs");
-      }).catch((error) => {
-        if(error.response) {
-          if(error.response.status === 404) {
-            Toast.show({
-              type: "error",
-              text1: "User not found"
-            })
-          }
-          else if(error.response.status === 401){
-            Toast.show({
-              type: "error",
-              text1: "Incorrect username or password"
-            })
-          }
+          navigation.replace("bottomTabs", {user});
+      
+    } catch (error) {
+      
+      if(error.response) {
+        if(error.response.status === 404) {
+          Toast.show({
+            type: "error",
+            text1: "User not found"
+          })
         }
-      })
+        else if(error.response.status === 401){
+          Toast.show({
+            type: "error",
+            text1: "Incorrect username or password"
+          })
+        }
+      }
+    }
+      
+      
 
 
 
