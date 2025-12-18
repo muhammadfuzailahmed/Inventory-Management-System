@@ -4,7 +4,7 @@ import Button from '../../../UI/Button/Button'
 import Toast from 'react-native-toast-message'
 import axios from 'axios'
 
-const AddProduct = ({ route }) => {
+const AddProduct = ({ navigation, route }) => {
   const { user } = route.params || {};
 
   const [productName, setProductName] = useState("");
@@ -13,6 +13,10 @@ const AddProduct = ({ route }) => {
   const [sellingPrice, setSellingPrice] = useState("");
   const [quantity, setQuantity] = useState("");
   const [productDescription, setProductDescription] = useState("");
+
+  const handleCancelBtn = () => {
+    navigation.navigate("bottomTabs", {user});
+  }
 
   const handleAddProductBtn = async () => {
     if (!productName || !productCategory || !buyingPrice || !sellingPrice || !quantity || !productDescription) {
@@ -63,6 +67,7 @@ const AddProduct = ({ route }) => {
 
   return (
     <View style={styles.container}>
+      <Button onPress={handleCancelBtn} title="Cancel"/>
       <Text style={styles.product}>Add New Product </Text>
       <View style={styles.horizontalBar}></View>
       <View style={styles.addProdoctForm}>
@@ -72,7 +77,7 @@ const AddProduct = ({ route }) => {
           <TextInput value={buyingPrice} onChangeText={(e) => setBuyingPrice(e)} style={styles.flexInput} placeholder='Buying price' />
           <TextInput value={sellingPrice} onChangeText={(e) => setSellingPrice(e)} style={styles.flexInput} placeholder='Selling price' />
         </View>
-        <TextInput value={quantity} onChangeText={(e) => setQuantity(e)} style={styles.input} placeholder='Quality' />
+        <TextInput value={quantity} onChangeText={(e) => setQuantity(e)} style={styles.input} placeholder='Quantity' />
         <TextInput value={productDescription} onChangeText={(e) => setProductDescription(e)} style={styles.input} placeholder='Description' /></View>
       <Button onPress={handleAddProductBtn} title="Add Product" />
     </View>
