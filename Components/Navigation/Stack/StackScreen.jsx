@@ -4,17 +4,21 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import login from "../../Authentication/Login/Login"
 import register from "../../Authentication/Register/Register"
 import SplashScreen from "../../Screens/SplashScreen/Splashscreen"
+import AddProduct from "../../Screens/Products/AddProduct/AddProduct"
 import TabScreens from "../BotomTab/TabScreens"
+
+
 const StackScreen = () => {
 
   const Stack = createNativeStackNavigator();
 
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Screen name='bottomTabs' component={TabScreens}/>
         <Stack.Screen name='SplashScreen' component={SplashScreen}/>
         <Stack.Screen name='login' component={login}/>
         <Stack.Screen name='register' component={register}/>
-        <Stack.Screen name='bottomTabs' component={TabScreens}/>
+        <Stack.Screen name='AddProduct' component={AddProduct}/>
     </Stack.Navigator>
   )
 }
