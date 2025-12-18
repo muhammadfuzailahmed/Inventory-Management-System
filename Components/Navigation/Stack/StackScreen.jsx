@@ -5,6 +5,7 @@ import login from "../../Authentication/Login/Login"
 import register from "../../Authentication/Register/Register"
 import SplashScreen from "../../Screens/SplashScreen/Splashscreen"
 import AddProduct from "../../Screens/Products/AddProduct/AddProduct"
+import ShowAllProducts from "../../Screens/Products/ShowAllProducts/ShowAllProducts"
 import TabScreens from "../BotomTab/TabScreens"
 
 
@@ -14,11 +15,11 @@ const StackScreen = () => {
 
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name='bottomTabs' component={TabScreens}/>
         <Stack.Screen name='SplashScreen' component={SplashScreen}/>
         <Stack.Screen name='login' component={login}/>
         <Stack.Screen name='register' component={register}/>
         <Stack.Screen name='AddProduct' component={AddProduct}/>
+        <Stack.Screen name='bottomTabs' component={TabScreens}/>
     </Stack.Navigator>
   )
 }
