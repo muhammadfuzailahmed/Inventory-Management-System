@@ -1,10 +1,10 @@
 import { Alert, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const ShowAllProducts = ({navigation}) => {
-  
+const ShowAllProducts = ({navigation, route}) => {
+  const {user} = route.params || {};  
   const handleAddProductBtn = () => {
-    navigation.navigate("AddProduct");
+    navigation.navigate("AddProduct", {user});
   }
   
   return (
