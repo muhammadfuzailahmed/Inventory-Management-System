@@ -1,22 +1,73 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native'
+import React, { useState } from 'react'
 import Button from '../../../UI/Button/Button'
+import Toast from 'react-native-toast-message'
+import axios from 'axios'
 
-const AddProduct = () => {
+const AddProduct = ({ route }) => {
+  const { user } = route.params || {};
+
+  const [productName, setProductName] = useState("");
+  const [productCategory, setProductCategory] = useState("");
+  const [buyingPrice, setBuyingPrice] = useState("");
+  const [sellingPrice, setSellingPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [productDescription, setProductDescription] = useState("");
+
+  const handleAddProductBtn = async () => {
+    if (!productName || !productCategory || !buyingPrice || !sellingPrice || !quantity || !productDescription) {
+      Toast.show({
+        type: "error",
+        text1: "Fill all required fields"
+      })
+      return;
+    };
+    let userEmail = user.email;
+    let reponse = await axios.post("http://192.168.100.99:5000/addProduct", {
+      productName,
+      productCategory,
+      buyingPrice,
+      sellingPrice,
+      quantity,
+      productDescription,
+    }).then(() => {
+      Toast.show({
+        type: "success",
+        text1: "Product Added Successfully!"
+      });
+    }).catch((error) => {
+      if (error.reponse) {
+        if (error.reponse.status = 404) {
+          Toast.show({
+            type: "error",
+            text1: "User not found"
+          });
+        } else if (error.reponse.status = 401) {
+          Toast.show({
+            type: "error",
+            text1: "Con't add product!"
+          })
+        }
+      }
+    })
+
+  }
+
+
   return (
     <View style={styles.container}>
       <Text style={styles.product}>Add New Product </Text>
       <View style={styles.horizontalBar}></View>
       <View style={styles.addProdoctForm}>
-        <TextInput style={styles.input} placeholder='Product Name' />
-        <TextInput style={styles.input} placeholder='category' />
+        <TextInput value={productName} onChangeText={(e) => setProductName(e)} style={styles.input} placeholder='Product Name' />
+        <TextInput value={productCategory} onChangeText={(e) => setProductCategory(e)} style={styles.input} placeholder='category' />
         <View style={styles.formFlex}>
-          <TextInput style={styles.flexInput} placeholder='Buying price' />
-          <TextInput style={styles.flexInput} placeholder='Selling price' />
+          <TextInput value={buyingPrice} onChangeText={(e) => setBuyingPrice(e)} style={styles.flexInput} placeholder='Buying price' />
+          <TextInput value={sellingPrice} onChangeText={(e) => setSellingPrice(e)} style={styles.flexInput} placeholder='Selling price' />
         </View>
-        <TextInput style={styles.input} placeholder='Quality' />
-        <TextInput style={styles.input} placeholder='Description' /></View>
-        <Button title="Add Product"/>
+        <TextInput value={quantity} onChangeText={(e) => setQuantity(e)} style={styles.input} placeholder='Quality' />
+        <TextInput value={productDescription} onChangeText={(e) => setProductDescription(e)} style={styles.input} placeholder='Description' /></View>
+      <Button onPress={handleAddProductBtn} title="Add Product" />
     </View>
   )
 }
