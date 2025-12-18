@@ -22,7 +22,6 @@ const AddProduct = ({ route }) => {
       })
       return;
     };
-    let userEmail = user.email;
     let reponse = await axios.post("http://192.168.100.99:5000/addProduct", {
       productName,
       productCategory,
@@ -35,6 +34,14 @@ const AddProduct = ({ route }) => {
         type: "success",
         text1: "Product Added Successfully!"
       });
+
+      setProductName("");
+      setProductCategory("");
+      setBuyingPrice("");
+      setSellingPrice("");
+      setQuantity("");
+      setProductDescription("");
+
     }).catch((error) => {
       if (error.reponse) {
         if (error.reponse.status = 404) {
