@@ -5,7 +5,7 @@ import login from "../../Authentication/Login/Login"
 import register from "../../Authentication/Register/Register"
 import SplashScreen from "../../Screens/SplashScreen/Splashscreen"
 import AddProduct from "../../Screens/Products/AddProduct/AddProduct"
-import ShowAllProducts from "../../Screens/Products/ShowAllProducts/ShowAllProducts"
+import AddExpense from "../../Screens/Expenses/AddExpense/AddExpense"
 import TabScreens from "../BotomTab/TabScreens"
 
 
@@ -19,6 +19,7 @@ const StackScreen = () => {
         <Stack.Screen name='login' component={login}/>
         <Stack.Screen name='register' component={register}/>
         <Stack.Screen name='AddProduct' component={AddProduct}/>
+        <Stack.Screen name='AddExpense' component={AddExpense}/>
         <Stack.Screen name='bottomTabs' component={TabScreens}/>
     </Stack.Navigator>
   )
