@@ -26,6 +26,7 @@ const AddProduct = ({ navigation, route }) => {
       })
       return;
     };
+  const id = user.id;
     let reponse = await axios.post("http://192.168.100.99:5000/addProduct", {
       productName,
       productCategory,
@@ -33,6 +34,7 @@ const AddProduct = ({ navigation, route }) => {
       sellingPrice,
       quantity,
       productDescription,
+      id
     }).then(() => {
       Toast.show({
         type: "success",
@@ -47,13 +49,13 @@ const AddProduct = ({ navigation, route }) => {
       setProductDescription("");
 
     }).catch((error) => {
-      if (error.reponse) {
+      if (error.response) {
         if (error.reponse.status = 404) {
           Toast.show({
             type: "error",
             text1: "User not found"
           });
-        } else if (error.reponse.status = 401) {
+        } else if (error.response.status = 401) {
           Toast.show({
             type: "error",
             text1: "Con't add product!"
