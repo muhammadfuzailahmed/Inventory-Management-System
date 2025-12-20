@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState, useCallback } from 'react'
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -90,6 +90,31 @@ const Dashboard = ({ route }) => {
     <Text style={styles.lowStock}>Low Stock Warning</Text>
     <View style={styles.horizontalBar}></View>
 
+    <View style={styles.lowStockWarningContainer}>
+        <FlatList 
+        data={userData.inventory}
+        keyExtractor={(e) => e._id.toString()}
+        renderItem={({item}) => {
+          if (item.quantity < 15) {
+          return (
+            <View style={styles.lowStockCard}>
+          <View style={styles.flex}>
+            <View>
+            <Text style={styles.productTitle}>{item.productName}</Text>
+            <Text style={styles.productCategory}>{item.productCategory}</Text>
+            </View>
+          <Text style={styles.productQuantity}>Left: {item.quantity}</Text>
+          </View>
+        </View>
+          )  
+          }
+          
+        }}
+        />
+        
+        {/*  */}
+    </View>
+
     </View>
   )
 }
@@ -169,5 +194,39 @@ const styles = StyleSheet.create({
     height: 5,
     borderRadius: 25,
     marginBottom: 15
-  }
+  },
+  lowStockWarningContainer: {
+    marginTop: 0
+  },
+  lowStockCard: {
+    backgroundColor: "#fff",
+    padding:14,
+    borderRadius: 10,
+    elevation: 5,
+    marginVertical: 8
+  },
+  productTitle: {
+  fontWeight: "800",
+  fontSize: 18
+},
+productCategory: {
+  fontWeight: "bold",
+  fontSize: 15,
+  color: "gray"
+},
+productQuantity:{
+  fontSize: 18,
+  fontWeight: "bold",
+  backgroundColor: "red",
+  color: "#fff",
+  paddingVertical: 6,
+  paddingHorizontal: 12,
+  borderRadius: 50
+},
+flex: {
+  flexDirection:"row",
+  alignItems: "center",
+  justifyContent: "space-between",
+  marginHorizontal: 10
+}
 })
