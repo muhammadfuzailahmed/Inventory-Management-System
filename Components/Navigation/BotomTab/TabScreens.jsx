@@ -5,6 +5,7 @@ import Dashboard from "../../Screens/Dashboard/Dashboard"
 import ShowAllProducts from "../../Screens/Products/ShowAllProducts/ShowAllProducts"
 import ShowAllExpenses from "../../Screens/Expenses/ShowAllExpenses/ShowAllExpenses"
 import sellProduct from "../../Screens/SellProducts/SellProduct/SellProduct"
+import Settings from "../../Screens/Settings/Settings"
 import { useRoute } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
@@ -17,6 +18,7 @@ const TabScreens = ({route}) => {
       <Tab.Screen name='inventory' component={ShowAllProducts} initialParams={{user}}/>
       <Tab.Screen name='expenseList' component={ShowAllExpenses} initialParams={{user}}/>
       <Tab.Screen name='sellProduct' component={sellProduct} initialParams={{user}}/>
+      <Tab.Screen name='settings' component={Settings} initialParams={{user}}/>
     </Tab.Navigator>
   )
 }
