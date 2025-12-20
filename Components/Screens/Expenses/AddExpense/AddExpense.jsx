@@ -63,7 +63,7 @@ const AddExpense = ({navigation, route}) => {
     <Modal visible={isShown} animationType='slide'>
     <View style={styles.container}>
       <View style={styles.cancelBtnContainer}>
-        <Button onPress={handleCancelBtn} title="Cancel"/>
+        <Button onPress={handleCancelBtn} title="Back"/>
       </View>
       <Text style={styles.expense}>Add Expense</Text>
       <View style={styles.horizontalBar}></View>
@@ -89,8 +89,8 @@ const styles = StyleSheet.create({
   },
   cancelBtnContainer: {
     position: "absolute",
-    left: -20,
-    top: 45,
+    left: -25,
+    top: 10,
     width: "40%",
   },
   expense: {
