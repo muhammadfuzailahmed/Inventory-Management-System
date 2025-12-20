@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Modal } from 'react-native'
 import React, { useState } from 'react'
 import Button from '../../../UI/Button/Button'
 import Toast from 'react-native-toast-message'
@@ -13,8 +13,10 @@ const AddProduct = ({ navigation, route }) => {
   const [sellingPrice, setSellingPrice] = useState("");
   const [quantity, setQuantity] = useState("");
   const [productDescription, setProductDescription] = useState("");
+  const [isShown, setIsShown] = useState(true);
 
   const handleCancelBtn = () => {
+    setIsShown(false);
     navigation.navigate("bottomTabs", {user});
   }
 
@@ -68,8 +70,11 @@ const AddProduct = ({ navigation, route }) => {
 
 
   return (
+    <Modal visible={isShown} animationType='slide'>
     <View style={styles.container}>
+    <View style={styles.cancelBtnContainer}>
       <Button onPress={handleCancelBtn} title="Cancel"/>
+    </View>
       <Text style={styles.product}>Add New Product </Text>
       <View style={styles.horizontalBar}></View>
       <View style={styles.addProdoctForm}>
@@ -83,6 +88,7 @@ const AddProduct = ({ navigation, route }) => {
         <TextInput value={productDescription} onChangeText={(e) => setProductDescription(e)} style={styles.input} placeholder='Description' /></View>
       <Button onPress={handleAddProductBtn} title="Add Product" />
     </View>
+    </Modal>
   )
 }
 
@@ -93,6 +99,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center"
+  },
+  cancelBtnContainer: {
+    position: "absolute",
+    left: -20,
+    top: 45,
+    width: "40%",
   },
   product: {
     textAlign: "center",
@@ -142,9 +154,7 @@ const styles = StyleSheet.create({
     paddingLeft: 90
   },
   saveexptext: {
-
     fontSize: 24,
     color: '#ffffffff'
   }
-
 })
