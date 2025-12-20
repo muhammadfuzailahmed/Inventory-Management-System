@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Modal } from 'react-native'
 import React, { useState } from 'react'
 import Button from '../../../UI/Button/Button';
 import Toast from 'react-native-toast-message';
@@ -9,9 +9,11 @@ const AddExpense = ({navigation, route}) => {
   const [title, setTile] = useState("");
   const [category, setCategory] = useState("");
   const [amount, setAmount] = useState("");
+  const [isShown, setIsShown] = useState(true);
   // const [date, setDate] = useState("");
 
   const handleCancelBtn = () => {
+    setIsShown(false);
     navigation.navigate("bottomTabs", {user});
   }
 
@@ -58,8 +60,11 @@ const AddExpense = ({navigation, route}) => {
 
 
   return (
+    <Modal visible={isShown} animationType='slide'>
     <View style={styles.container}>
-      <Button onPress={handleCancelBtn} title="Cancel"/>
+      <View style={styles.cancelBtnContainer}>
+        <Button onPress={handleCancelBtn} title="Cancel"/>
+      </View>
       <Text style={styles.expense}>Add Expense</Text>
       <View style={styles.horizontalBar}></View>
       <View style={styles.addExpenseForm}>
@@ -70,6 +75,7 @@ const AddExpense = ({navigation, route}) => {
       </View>
       <Button onPress={handleAddExpenseBtn} title="Add Expense" />
     </View>
+    </Modal>
   )
 }
 
@@ -80,6 +86,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center"
+  },
+  cancelBtnContainer: {
+    position: "absolute",
+    left: -20,
+    top: 45,
+    width: "40%",
   },
   expense: {
     textAlign: "center",
