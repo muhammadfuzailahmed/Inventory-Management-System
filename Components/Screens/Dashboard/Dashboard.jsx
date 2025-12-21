@@ -54,7 +54,7 @@ const Dashboard = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.flex}>
+      <View style={styles.flexUsername}>
         <View style={styles.logoContainer}>
           <Text style={styles.logoName}>{userData?.name[0]}</Text>
         </View>
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     textAlign: "center"
   },
-  flex: {
+  flexUsername: {
     flexDirection: "row",
     alignItems: "center",
     gap: 10
