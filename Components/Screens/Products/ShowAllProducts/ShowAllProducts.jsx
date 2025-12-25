@@ -3,19 +3,19 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useFocusEffect } from '@react-navigation/native';
 import Button from '../../../UI/Button/Button';
 import { ActivityIndicator } from 'react-native';
+import AddProduct from '../AddProduct/AddProduct';
 
 const ShowAllProducts = ({navigation, route}) => {
   const {user} = route.params || {};  
   const [items, setItems] = useState([]);
   const [loader, setLoader] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
   const handleAddProductBtn = () => {
-    navigation.navigate("AddProduct", {user});
+    setShowModal(true);
   }
 
-useFocusEffect(
-  useCallback(() => {
-    const fetchProducts = async () => {
+const fetchProducts = async () => {
       try {
         const res = await fetch(
           `http://192.168.100.99:5000/products/${user.id}`
@@ -35,6 +35,8 @@ useFocusEffect(
       }
     };
 
+useFocusEffect(
+  useCallback(() => {
     fetchProducts();
   }, [])
 );
@@ -80,6 +82,7 @@ useFocusEffect(
         <Text>No products found!</Text>  
     }  
       </View>
+    {showModal && <AddProduct setModal={setShowModal} fetchData={fetchProducts} user={user}/>}
     </View>
   )
 }
