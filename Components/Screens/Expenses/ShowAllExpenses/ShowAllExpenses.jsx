@@ -1,43 +1,40 @@
 import { StyleSheet, Text, View, FlatList } from 'react-native'
-import React, {useCallback, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import Button from '../../../UI/Button/Button'
 import { useFocusEffect } from '@react-navigation/native'
 import { ActivityIndicator } from 'react-native'
+import AddExpense from '../AddExpense/AddExpense'
 
 const ShowAllExpenses = ({navigation, route}) => {
   const {user} = route.params || {};
 
   const [expenses, setExpenses] = useState([]);
   const [loader, setLoader] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
   function handleAddExpenseBtn() {
-    navigation.navigate("AddExpense", { user })
+    setShowModal(true);
   }
+
+  const fetchExpenses = async () => {
+  try {
+    setLoader(true);
+    const res = await fetch(
+      `http://192.168.100.99:5000/expenses/${user.id}`
+    );
+    const data = await res.json();
+    setExpenses(data);
+  } catch (err) {
+    console.log(err);
+  } finally {
+    setLoader(false);
+  }
+};
+
 
   useFocusEffect(
     useCallback(() => {
-      const fetchProducts = async () => {
-        try {
-          const res = await fetch(
-            `http://192.168.100.99:5000/expenses/${user.id}`
-          );
-          setLoader(false);
-  
-          if (!res.ok) {
-            const error = await res.text();
-            console.log("Backend error:", error);
-            return;
-          }
-  
-          const data = await res.json();
-          setExpenses(data);
-  
-        } catch (error) {
-          console.log("Fetch error:", error);
-        }
-      };
-  
-      fetchProducts();
+      fetchExpenses();
     }, [])
   );
   
@@ -80,6 +77,7 @@ const ShowAllExpenses = ({navigation, route}) => {
               <Text>No expenses found!</Text>  
           }  
             </View>
+            {showModal && <AddExpense user={user} showModal={setShowModal} refreshExpenses={fetchExpenses}/>}
     </View>
       )
 }
