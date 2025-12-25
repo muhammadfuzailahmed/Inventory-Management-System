@@ -8,6 +8,7 @@ const Dashboard = ({ route }) => {
   const [totalValue, setTotalValue] = useState(0);
   const [totalProfit, setTotalProfit] = useState(0);
   const [totalExpenses, setTotalExpenses] = useState(0);
+  const [totalSellAmount, setTotslSellAmount] = useState(0);
 
   useFocusEffect(
   useCallback(() => {
@@ -29,6 +30,7 @@ const Dashboard = ({ route }) => {
     calculateTotalValue();
     calculateTotalProfit();
     calculateTotalExpenses();
+    calculateTotalSales();
   }, [userData])
 
   const calculateTotalValue = () => {
@@ -50,6 +52,13 @@ const Dashboard = ({ route }) => {
       return sum + t.expenseAmount;
     }, 0)
     setTotalExpenses(total);
+  }
+
+  const calculateTotalSales = () => {
+    const total = userData?.soldProduct?.reduce((sum, t) => {
+      return sum + t.totalSalePrice;
+    }, 0)
+    setTotslSellAmount(total);
   }
 
   return (
@@ -82,8 +91,8 @@ const Dashboard = ({ route }) => {
         </View>
         <View style={styles.card}>
           <Text style={styles.cardImg}>👜</Text>
-          <Text style={styles.cardText}>Total Value</Text>
-          <Text style={styles.cardTotal}>$12,500</Text>
+          <Text style={styles.cardText}>Total Sales</Text>
+          <Text style={styles.cardTotal}>Rs. {totalSellAmount}</Text>
         </View>
       </View>
 
