@@ -4,17 +4,14 @@ import Button from '../../../UI/Button/Button';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
 
-const AddExpense = ({navigation, route}) => {
-  const {user} = route.params || {};
+const AddExpense = ({user, showModal, refreshExpenses}) => {
   const [title, setTile] = useState("");
   const [category, setCategory] = useState("");
   const [amount, setAmount] = useState("");
-  const [isShown, setIsShown] = useState(true);
-  // const [date, setDate] = useState("");
 
   const handleCancelBtn = () => {
-    setIsShown(false);
-    navigation.navigate("bottomTabs", {user});
+    showModal(false);
+    refreshExpenses();
   }
 
   const handleAddExpenseBtn = async () => {
@@ -32,6 +29,8 @@ const AddExpense = ({navigation, route}) => {
       amount,
       id
     }).then(() => {
+      showModal(false);
+      refreshExpenses();
       Toast.show({
         type: "success",
         text1: "Expense Added Successfully!"
@@ -60,7 +59,7 @@ const AddExpense = ({navigation, route}) => {
 
 
   return (
-    <Modal visible={isShown} animationType='slide'>
+    <Modal animationType='slide'>
     <View style={styles.container}>
       <View style={styles.cancelBtnContainer}>
         <Button onPress={handleCancelBtn} title="Back"/>
