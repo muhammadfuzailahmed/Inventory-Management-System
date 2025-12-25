@@ -1,24 +1,59 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '../../../UI/Button/Button'
+import Toast from 'react-native-toast-message'
+import axios from 'axios'
 
-const SellProductInvoice = () => {
+const SellProductInvoice = ({product, completeProduct, setModal, user}) => {
+  const [productName, setProductName] = useState(completeProduct.productName);
+  const [quantity, setQuantity] = useState(product.quantity);
+  const [id, setId] = useState(user.id);
+
+  const handleCompleteSaleBtn = async () => {
+
+    await axios.post("http://192.168.100.99:5000/sellproduct", {
+      productName,
+      quantity,
+      id
+    }).then(() => {
+      setModal(false);
+      Toast.show({
+        type: "success",
+        text1: "Product sold"
+      });
+    })
+
+  }
+
+  useEffect(() => {    
+    setProductName(completeProduct.productName);
+    setQuantity(product.quantity);
+    setId(user.id);
+    calculateProfit();
+  }, [])
+
+  const [estimatedProfit, setEstimatedProfit] = useState(0)
+  const calculateProfit = () => {
+    let profit = (completeProduct.sellingPrice * product.quantity) - (completeProduct.buyingPrice * product.quantity);
+    setEstimatedProfit(profit);
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.textstyle}>
-        {/* This is a dummy text for showing items user chose on previous page */}
-        Selected Product: Wireless Mouse
+        Selected Product: {completeProduct.productName}
       </Text>
       <View style={styles.infoBlock}>
-        <Text style={styles.textstyle3}>Current Stock: 15</Text>
-        <Text style={styles.textstyle3}>Item Sold: 5</Text>
+        <Text style={styles.textstyle3}>Current Stock: {completeProduct.quantity}</Text>
+        <Text style={styles.textstyle3}>Item Sold: {product.quantity}</Text>
       </View>
       <View style={styles.container2}>
         <Text style={styles.cont2label1}>Live Calc Area</Text>
-        <Text style={styles.cont2label2}>Total Sale Price: </Text>
-        <Text style={styles.cont2label3}>Estimated Profit: </Text>
+        <Text style={styles.cont2label2}>Total Sale Price: Rs. {completeProduct.sellingPrice}</Text>
+        <Text style={styles.cont2label3}>Estimated Profit: Rs. {estimatedProfit}</Text>
+        <Text style={styles.cont2label3}>Product Quantity after sale: {completeProduct.quantity - product.quantity}</Text>
       </View>
-        <Button title="Complete Sale"/>
+        <Button onPress={handleCompleteSaleBtn} title="Complete Sale"/>
     </View>
   )
 }
