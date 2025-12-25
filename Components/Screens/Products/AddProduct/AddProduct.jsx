@@ -4,8 +4,7 @@ import Button from '../../../UI/Button/Button'
 import Toast from 'react-native-toast-message'
 import axios from 'axios'
 
-const AddProduct = ({ navigation, route }) => {
-  const { user } = route.params || {};
+const AddProduct = ({ setModal, route, fetchData, user}) => {
 
   const [productName, setProductName] = useState("");
   const [productCategory, setProductCategory] = useState("");
@@ -16,8 +15,8 @@ const AddProduct = ({ navigation, route }) => {
   const [isShown, setIsShown] = useState(true);
 
   const handleCancelBtn = () => {
-    setIsShown(false);
-    navigation.navigate("bottomTabs", {user});
+    setModal(false);
+    fetchData();
   }
 
   const handleAddProductBtn = async () => {
@@ -38,6 +37,8 @@ const AddProduct = ({ navigation, route }) => {
       productDescription,
       id
     }).then(() => {
+      setModal(false);
+      fetchData();
       Toast.show({
         type: "success",
         text1: "Product Added Successfully!"
@@ -70,7 +71,7 @@ const AddProduct = ({ navigation, route }) => {
 
 
   return (
-    <Modal visible={isShown} animationType='slide'>
+    <Modal animationType='slide'>
     <View style={styles.container}>
     <View style={styles.cancelBtnContainer}>
       <Button onPress={handleCancelBtn} title="Back"/>
