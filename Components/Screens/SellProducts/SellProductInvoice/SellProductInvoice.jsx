@@ -7,6 +7,8 @@ import axios from 'axios'
 const SellProductInvoice = ({product, completeProduct, setModal, user}) => {
   const [productName, setProductName] = useState(completeProduct.productName);
   const [quantity, setQuantity] = useState(product.quantity);
+  const [totalSalePrice, setTotalSalePrice] = useState(completeProduct.sellingPrice * product.quantity)
+  const [estimatedProfit, setEstimatedProfit] = useState(0)
   const [id, setId] = useState(user.id);
 
   const handleCompleteSaleBtn = async () => {
@@ -14,6 +16,8 @@ const SellProductInvoice = ({product, completeProduct, setModal, user}) => {
     await axios.post("http://192.168.100.99:5000/sellproduct", {
       productName,
       quantity,
+      totalSalePrice,
+      estimatedProfit,
       id
     }).then(() => {
       setModal(false);
@@ -29,10 +33,13 @@ const SellProductInvoice = ({product, completeProduct, setModal, user}) => {
     setProductName(completeProduct.productName);
     setQuantity(product.quantity);
     setId(user.id);
+    console.log(product.quantity);
+    console.log(completeProduct.quantity);
+    
     calculateProfit();
   }, [])
 
-  const [estimatedProfit, setEstimatedProfit] = useState(0)
+  
   const calculateProfit = () => {
     let profit = (completeProduct.sellingPrice * product.quantity) - (completeProduct.buyingPrice * product.quantity);
     setEstimatedProfit(profit);
@@ -49,7 +56,7 @@ const SellProductInvoice = ({product, completeProduct, setModal, user}) => {
       </View>
       <View style={styles.container2}>
         <Text style={styles.cont2label1}>Live Calc Area</Text>
-        <Text style={styles.cont2label2}>Total Sale Price: Rs. {completeProduct.sellingPrice}</Text>
+        <Text style={styles.cont2label2}>Total Sale Price: Rs. {completeProduct.sellingPrice * product.quantity}</Text>
         <Text style={styles.cont2label3}>Estimated Profit: Rs. {estimatedProfit}</Text>
         <Text style={styles.cont2label3}>Product Quantity after sale: {completeProduct.quantity - product.quantity}</Text>
       </View>
