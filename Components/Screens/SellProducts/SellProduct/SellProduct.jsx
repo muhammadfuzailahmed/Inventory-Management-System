@@ -67,7 +67,7 @@ const SellProduct = ({ navigation, route }) => {
       setDataFound(true);
       setModal(true);
       setProductName("")
-      setQuantity("")
+      setQuantity(0)
     } else {
       Toast.show({
         type: "error",
