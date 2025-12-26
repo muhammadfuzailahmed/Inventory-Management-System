@@ -1,5 +1,7 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const Settings = ({route}) => {
   const {user} = route.params || {};
@@ -18,9 +20,48 @@ const Settings = ({route}) => {
         <View style={styles.row}></View>
 
         <View style={styles.accountContainer}>
+          <Text style={styles.label}>ACCOUNT</Text>
+          <TouchableOpacity style={styles.accountCard}>
+            <View style={styles.flex}>
+              <FontAwesome name="lock" size={23} />
+              <Text style={styles.accountCardText}>Change Password</Text>
+            </View>
+            <View>
+                <MaterialIcons name="arrow-forward-ios" size={22} />
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.accountCard}>
+            <View style={styles.flex}>
+              <FontAwesome name="user" size={23} />
+              <Text style={styles.accountCardText}>Update Info</Text>
+            </View>
+            <View>
+                <MaterialIcons name="arrow-forward-ios" size={22} />
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.accountContainer2}>
+          <Text style={styles.label}>GENERAL</Text>
+          <TouchableOpacity style={styles.accountCard}>
+            <View style={styles.flex}>
+              <FontAwesome name="lock" size={23} />
+              <Text style={styles.accountCardText}>Order History</Text>
+            </View>
+            <View>
+                <MaterialIcons name="arrow-forward-ios" size={22} />
+            </View>
+          </TouchableOpacity>
+
           <View style={styles.accountCard}>
-            <Text>🔒</Text>
-            <Text>Change Password</Text>
+            <View style={styles.flex}>
+              <FontAwesome name="user" size={23} />
+              <Text style={styles.accountCardText}>App Version</Text>
+            </View>
+            <View>
+                <Text style={styles.accountCardText}>v1.1.0</Text>
+            </View>
           </View>
         </View>
 
@@ -33,7 +74,7 @@ export default Settings
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    marginTop: 70,
     alignItems: "center"
   },
   emailCard: {
@@ -71,18 +112,48 @@ const styles = StyleSheet.create({
     height: 2,
     marginVertical: 20
   },
+  label: {
+    fontSize: 19,
+    position: "absolute",
+    top: -30,
+  },
   accountContainer: {
     width: "95%",
-    height: "25%",
+    paddingVertical: 15,
     backgroundColor: "#fff",
     borderRadius: 6,
     elevation: 5,
     paddingHorizontal: 10,
-    gap: 15
+    gap: 5,
+    marginTop: 35,
+    position: "relative"
+  },
+  accountContainer2: {
+    width: "95%",
+    paddingVertical: 15,
+    backgroundColor: "#fff",
+    borderRadius: 6,
+    elevation: 5,
+    paddingHorizontal: 10,
+    gap: 5,
+    marginTop: 55,
+    position: "relative"
   },
   accountCard: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
+    gap: 15,
+    padding: 10,
+  },
+  accountCardText: {
+    fontSize: 17
+  },
+  flex: {
+    flexDirection: "row",
     gap: 15
+  },
+  mt: {
+    marginTop: 20
   }
 })
