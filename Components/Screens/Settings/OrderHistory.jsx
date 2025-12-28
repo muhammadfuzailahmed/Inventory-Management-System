@@ -43,7 +43,10 @@ const OrderHistory = ({navigation}) => {
         <MaterialIcons name="arrow-back-ios-new" size={28} />
       </Text>
       <View style={styles.horizontalBar}></View>
-        <FlatList 
+      {
+      userData?.soldProduct?.length > 0 
+      ?
+      <FlatList 
         data={userData.soldProduct}
         keyExtractor={(e) => e._id.toString()}
         renderItem={({item}) => {
@@ -57,7 +60,10 @@ const OrderHistory = ({navigation}) => {
         </View>
           )
         }}
-        />
+        />: 
+        <Text style={styles.noProductFound}>No orders found!</Text>
+      }
+        
     </View>
   )
 }
@@ -96,5 +102,10 @@ const styles = StyleSheet.create({
     height: 3,
     marginHorizontal: "auto",
     marginVertical: 10
+  },
+  noProductFound: {
+    textAlign: "center",
+    fontSize: 17,
+    fontWeight: "500"
   }
 })
