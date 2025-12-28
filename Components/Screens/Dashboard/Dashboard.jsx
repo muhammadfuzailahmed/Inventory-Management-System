@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState, useCallback } from 'react'
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -9,6 +9,7 @@ const Dashboard = ({ route }) => {
   const [totalProfit, setTotalProfit] = useState(0);
   const [totalExpenses, setTotalExpenses] = useState(0);
   const [totalSellAmount, setTotslSellAmount] = useState(0);
+  const [loader, setLoader] = useState(true);
 
   useFocusEffect(
   useCallback(() => {
@@ -16,6 +17,7 @@ const Dashboard = ({ route }) => {
       try {
         const res = await fetch(`http://192.168.100.99:5000/user/${user.id}`);
         const data = await res.json();
+        setLoader(false);
         setUserData(data);
       } catch (err) {
         console.log(err);
@@ -61,7 +63,11 @@ const Dashboard = ({ route }) => {
     setTotslSellAmount(total);
   }
 
-  return (
+  return loader ? (
+    <View style={styles.loadingContainer}>
+      <ActivityIndicator size="large" />
+    </View>
+  ) : (
     <View style={styles.container}>
       <View style={styles.flexUsername}>
         <View style={styles.logoContainer}>
@@ -131,6 +137,11 @@ const Dashboard = ({ route }) => {
 export default Dashboard
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  },  
   container: {
     flex: 1,
     marginTop: 55,
