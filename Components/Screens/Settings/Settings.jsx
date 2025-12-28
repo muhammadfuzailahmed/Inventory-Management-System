@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import ChangePassword from "./ChangePassword"
 import Button from '../../UI/Button/Button';
 
 const Settings = ({route, navigation}) => {
