@@ -1,6 +1,9 @@
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState, useCallback } from 'react'
 import { useFocusEffect } from '@react-navigation/native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Feather from 'react-native-vector-icons/Feather';
 
 const Dashboard = ({ route }) => {
   const { user } = route.params || {};
@@ -78,12 +81,16 @@ const Dashboard = ({ route }) => {
       <Text style={styles.overviewText}>Here's current overview</Text>
       <View style={styles.row}>
         <View style={styles.card}>
-          <Text style={styles.cardImg}>💲</Text>
+          <Text style={styles.cardImg}>
+            <MaterialIcons name="attach-money" size={30}/>
+          </Text>
           <Text style={styles.cardText}>Total Value</Text>
             <Text style={styles.cardTotal}>Rs.{totalValue}</Text>
         </View>
         <View style={styles.card}>
-          <Text style={styles.cardImg}>📈</Text>
+          <Text style={styles.cardImg}>
+            <Entypo name="area-graph" size={30}/>
+          </Text>
           <Text style={styles.cardText}>Total Profit</Text>
           <Text style={styles.cardTotal}>Rs. {totalProfit}</Text>
         </View>
@@ -91,12 +98,16 @@ const Dashboard = ({ route }) => {
 
       <View style={styles.row}>
         <View style={styles.card}>
-          <Text style={styles.cardImg}>🛒</Text>
+          <Text style={styles.cardImg}>
+            <MaterialIcons name="shopping-cart" size={30}/>
+          </Text>
           <Text style={styles.cardText}>Total Expenses</Text>
           <Text style={styles.cardTotal}>Rs.{totalExpenses}</Text>
         </View>
         <View style={styles.card}>
-          <Text style={styles.cardImg}>👜</Text>
+          <Text style={styles.cardImg}>
+            <Feather name="activity" size={30}/>
+          </Text>
           <Text style={styles.cardText}>Total Sales</Text>
           <Text style={styles.cardTotal}>Rs. {totalSellAmount}</Text>
         </View>
@@ -126,8 +137,6 @@ const Dashboard = ({ route }) => {
           
         }}
         />
-        
-        {/*  */}
     </View>
 
     </View>
@@ -170,7 +179,8 @@ const styles = StyleSheet.create({
   },
   overviewText: {
     marginTop: 5,
-    fontSize: 17
+    fontSize: 17,
+    fontWeight: "500"
   },
   row: {
     flexDirection: "row",
@@ -192,8 +202,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   cardImg: {
-    fontSize: 24,
-    marginBottom: 5
+    marginBottom: 5,
   },
   cardText: {
     fontSize: 18,
