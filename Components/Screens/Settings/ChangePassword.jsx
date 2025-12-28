@@ -2,25 +2,61 @@ import { Alert, Modal, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useState } from 'react'
 import Button from "../../UI/Button/Button"
 import Toast from 'react-native-toast-message';
+import { useRoute } from '@react-navigation/native';
+import axios from 'axios';
 
-const ChangePassword = ({ navigation, route }) => {
-    
+const ChangePassword = ({navigation}) => {
+    const route = useRoute();
+    const { user } = route.params || {};
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
-    const handleChangePassswordBtn = () => {
-        if(!oldPassword || !newPassword || !confirmNewPassword) {
+    const handleChangePassswordBtn = async () => {
+        if (!oldPassword || !newPassword || !confirmNewPassword) {
             Toast.show({
                 type: "error",
                 text1: "Fill required fields"
             });
             return;
         }
-        Alert.alert("Button Pressed")
-        setOldPassword("");
-        setNewPassword("");
-        setConfirmNewPassword("");
+        if(newPassword !== confirmNewPassword) {
+            Toast.show({
+                type: "error",
+                text1: "Password does not match"
+            });
+            return;
+        }
+        let id = user.id;
+        await axios.post("http://192.168.100.99:5000/changePassword", {
+            id,
+            oldPassword,
+            newPassword,
+            confirmNewPassword
+        }).then(() => {
+            Toast.show({
+                type: "success",
+                text1: "Password updated successfully!"
+            });
+            setOldPassword("");
+            setNewPassword("");
+            setConfirmNewPassword("");
+            navigation.navigate("login");
+        }).catch((error) => {
+            if (error.response) {
+                if (error.response.status === 404) {
+                    Toast.show({
+                        type: "error",
+                        text1: "User not found"
+                    })
+                } else if (error.response.status === 401) {
+                    Toast.show({
+                        type: "error",
+                        text1: "Incorrect password"
+                    })
+                }
+            }
+        })
     }
 
     return (
@@ -29,10 +65,11 @@ const ChangePassword = ({ navigation, route }) => {
             <View style={styles.horizontalBar}></View>
 
             <View style={styles.formContainer}>
+                <Text>Hello {user.name}</Text>
                 <TextInput value={oldPassword} onChangeText={(e) => setOldPassword(e)} style={styles.input} placeholder='Enter Old Password' />
                 <TextInput value={newPassword} onChangeText={(e) => setNewPassword(e)} style={styles.input} placeholder='Enter New Password' />
                 <TextInput value={confirmNewPassword} onChangeText={(e) => setConfirmNewPassword(e)} style={styles.input} placeholder='Confirm New Password' />
-                <Button onPress={handleChangePassswordBtn} title="Change Password"/>
+                <Button onPress={handleChangePassswordBtn} title="Change Password" />
             </View>
         </View>
     )
