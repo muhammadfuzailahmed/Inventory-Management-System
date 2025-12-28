@@ -25,6 +25,14 @@ const ChangePassword = ({ navigation }) => {
             });
             return;
         }
+        if (password.length < 8) {
+            Toast.show({
+                type: "error",
+                text1: "Password should be of minimum 8 characters!",
+                topOffset: 60
+            });
+            return;
+        }
         if (newPassword !== confirmNewPassword) {
             Toast.show({
                 type: "error",
