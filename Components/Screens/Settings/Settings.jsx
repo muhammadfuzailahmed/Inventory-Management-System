@@ -1,10 +1,25 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import ChangePassword from "./ChangePassword"
+import Button from '../../UI/Button/Button';
 
-const Settings = ({route}) => {
+const Settings = ({route, navigation}) => {
   const {user} = route.params || {};
+  
+  const handleChangePasswordBtn = () => {
+    navigation.navigate("ChangePassword", {user});
+  }
+
+  const handleUpdateInfoBtn = () => {
+    navigation.navigate("UpdateInfo", {user});
+  }
+
+  const handleLogoutBtn = () => {
+    navigation.replace("login");
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.emailCard}>
@@ -21,7 +36,7 @@ const Settings = ({route}) => {
 
         <View style={styles.accountContainer}>
           <Text style={styles.label}>ACCOUNT</Text>
-          <TouchableOpacity style={styles.accountCard}>
+          <TouchableOpacity onPress={handleChangePasswordBtn} style={styles.accountCard}>
             <View style={styles.flex}>
               <FontAwesome name="lock" size={23} />
               <Text style={styles.accountCardText}>Change Password</Text>
@@ -31,7 +46,7 @@ const Settings = ({route}) => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.accountCard}>
+          <TouchableOpacity onPress={handleUpdateInfoBtn} style={styles.accountCard}>
             <View style={styles.flex}>
               <FontAwesome name="user" size={23} />
               <Text style={styles.accountCardText}>Update Info</Text>
@@ -64,7 +79,9 @@ const Settings = ({route}) => {
             </View>
           </View>
         </View>
-
+        <View style={styles.logoutBtnContainer}>
+          <Button onPress={handleLogoutBtn} title="Logout"/>
+        </View>
     </View>
   )
 }
@@ -90,14 +107,15 @@ const styles = StyleSheet.create({
   },
   letterContainer: {
     backgroundColor: "black",
-    borderRadius: "50%"
+    width: "10%",
+    borderRadius: "50%",
+    padding: 5
   },
   letter: {
-    color: "white",
-    paddingVertical: 10,
-    paddingHorizontal: 12,
+    fontWeight: "bold",
     fontSize: 20,
-    fontWeight: "bold"
+    color: "#fff",
+    textAlign: "center"
   },
   userName: {
     fontWeight: "bold",
@@ -153,7 +171,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 15
   },
-  mt: {
-    marginTop: 20
-  }
+  logoutBtnContainer: {
+    width: "100%",
+    marginTop: 15
+  },
+
 })
