@@ -2,6 +2,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import ChangePassword from "./ChangePassword"
 import Button from '../../UI/Button/Button';
 
@@ -16,6 +17,10 @@ const Settings = ({route, navigation}) => {
     navigation.navigate("UpdateInfo", {user});
   }
 
+  const handleOrderHistoryBtn = () => {
+    navigation.navigate("OrderHistory", {user});
+  }  
+  
   const handleLogoutBtn = () => {
     navigation.replace("login");
   }
@@ -59,9 +64,9 @@ const Settings = ({route, navigation}) => {
 
         <View style={styles.accountContainer2}>
           <Text style={styles.label}>GENERAL</Text>
-          <TouchableOpacity style={styles.accountCard}>
+          <TouchableOpacity onPress={handleOrderHistoryBtn} style={styles.accountCard}>
             <View style={styles.flex}>
-              <FontAwesome name="lock" size={23} />
+              <FontAwesome5 name="clock" size={23} />
               <Text style={styles.accountCardText}>Order History</Text>
             </View>
             <View>
