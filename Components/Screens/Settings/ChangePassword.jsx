@@ -4,13 +4,18 @@ import Button from "../../UI/Button/Button"
 import Toast from 'react-native-toast-message';
 import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const ChangePassword = ({navigation}) => {
+const ChangePassword = ({ navigation }) => {
     const route = useRoute();
     const { user } = route.params || {};
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmNewPassword, setConfirmNewPassword] = useState("");
+
+    const handleBackBtn = () => {
+        navigation.goBack();
+    }
 
     const handleChangePassswordBtn = async () => {
         if (!oldPassword || !newPassword || !confirmNewPassword) {
@@ -20,7 +25,7 @@ const ChangePassword = ({navigation}) => {
             });
             return;
         }
-        if(newPassword !== confirmNewPassword) {
+        if (newPassword !== confirmNewPassword) {
             Toast.show({
                 type: "error",
                 text1: "Password does not match"
@@ -61,11 +66,14 @@ const ChangePassword = ({navigation}) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.heading}>Change Password</Text>
+            <Text onPress={handleBackBtn} style={styles.backBtnContainer}>
+                <MaterialIcons name="arrow-back-ios-new" size={28} />
+            </Text>
             <View style={styles.horizontalBar}></View>
+            <Text style={styles.heading}>Change Password</Text>
+            <View style={styles.horizontalBarHeading}></View>
 
             <View style={styles.formContainer}>
-                <Text>Hello {user.name}</Text>
                 <TextInput value={oldPassword} onChangeText={(e) => setOldPassword(e)} style={styles.input} placeholder='Enter Old Password' />
                 <TextInput value={newPassword} onChangeText={(e) => setNewPassword(e)} style={styles.input} placeholder='Enter New Password' />
                 <TextInput value={confirmNewPassword} onChangeText={(e) => setConfirmNewPassword(e)} style={styles.input} placeholder='Confirm New Password' />
@@ -87,7 +95,7 @@ const styles = StyleSheet.create({
         fontSize: 28,
         fontWeight: "bold"
     },
-    horizontalBar: {
+    horizontalBarHeading: {
         width: "45%",
         backgroundColor: "navy",
         height: 6,
@@ -106,4 +114,18 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8,
         marginBottom: 10
     },
+    backBtnContainer: {
+        position: "absolute",
+        top: 60,
+        left: 10
+    },
+    horizontalBar: {
+        position: "absolute",
+        top: 95,
+        left: 10,
+        width: "95%",
+        backgroundColor: "navy",
+        height: 3,
+        marginHorizontal: "auto"
+    }
 })
