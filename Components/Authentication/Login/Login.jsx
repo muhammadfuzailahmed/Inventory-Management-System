@@ -1,4 +1,4 @@
-import { Alert, StyleSheet, Text, TextInput, View } from 'react-native'
+import { ActivityIndicator, Alert, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Button from "../../UI/Button/Button"
 import axios from 'axios'
@@ -7,16 +7,17 @@ import Toast from 'react-native-toast-message'
 const Login = ({navigation}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loader, setLoader] = useState(false);
   
   const handleLoginBtn = async () => {
     try {
+      setLoader(true);
       let response = await axios.post("http://192.168.100.99:5000/login", {
         email,
         password
       })
-        console.log("Login Successfull!")
-        const {user} = response.data
-        console.log(user);
+        const {user} = response.data;
+        setLoader(false);
         Toast.show({
           type: "success",
           text1: "Login successfull!"
@@ -28,6 +29,7 @@ const Login = ({navigation}) => {
     } catch (error) {
       
       if(error.response) {
+        setLoader(false);
         if(error.response.status === 404) {
           Toast.show({
             type: "error",
@@ -42,11 +44,6 @@ const Login = ({navigation}) => {
         }
       }
     }
-      
-      
-
-
-
   }
 
   const handleCreateAccountBtn = () => {
@@ -55,11 +52,17 @@ const Login = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+    {loader
+       && 
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" />
+      </View>
+    }
       <Text style={styles.heading}>Login</Text>
       <View style={styles.horizontalBar}></View>
       <View style={styles.formContainer}>
         <TextInput value={email} onChangeText={(e) => setEmail(e)} style={styles.input} placeholder='Enter Email'/>
-        <TextInput value={password} onChangeText={(e) => setPassword(e)} style={styles.input} placeholder='Enter Password'/>
+        <TextInput value={password} onChangeText={(e) => setPassword(e)} secureTextEntry={true} style={styles.input} placeholder='Enter Password'/>
         <Button onPress={handleLoginBtn} title="Login"/>
         <View style={styles.flex}>
           <Text>Don't have an account? </Text>
@@ -67,12 +70,15 @@ const Login = ({navigation}) => {
         </View>
       </View>
     </View>
-  )
+  ) 
 }
 
 export default Login
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    position: "absolute"
+  },
   container: {
     flex: 1,
     alignItems: "center",
