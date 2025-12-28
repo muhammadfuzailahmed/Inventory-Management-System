@@ -1,4 +1,4 @@
-import { Alert, StyleSheet, Text, TextInput, View } from 'react-native'
+import { ActivityIndicator, Alert, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useState } from 'react'
 import Button from "../../UI/Button/Button"
 import Toast from 'react-native-toast-message'
@@ -10,6 +10,7 @@ const Register = ({ navigation }) => {
   const [CNIC, setCNIC] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loader, setLoader] = useState(false);
 
   const handleRegisterBtn = async () => {
     if (!name || !businessName || !CNIC || !email || !password) {
@@ -32,9 +33,18 @@ const Register = ({ navigation }) => {
         text1: "Incorrect CNIC number!",
         topOffset: 60
       });
+      return;  
+    } 
+    else if(password.length < 8) {
+      Toast.show({
+        type: "error",
+        text1: "Password should be of minimum 8 characters!",
+        topOffset: 60
+      });
       return;
-    } else {
-
+    }
+    else {
+      setLoader(true);
       await axios.post("http://192.168.100.99:5000/register", {
       name,
       businessName,
@@ -42,12 +52,12 @@ const Register = ({ navigation }) => {
       email,
       password
     }).then(() => {
+      setLoader(false);
       Toast.show({
         type: "success",
         text1: "Account registered successfully!",
         topOffset: 60
       });
-
       setName("");
       setBusinessName("");
       setCNIC("");
@@ -75,6 +85,11 @@ const handleCreateAccountBtn = () => {
 
 return (
   <View style={styles.container}>
+    {loader && 
+    <View style={styles.loadingContainer}>
+      <ActivityIndicator size="large"/>
+    </View>
+    }
     <Text style={styles.heading}>Register</Text>
     <View style={styles.horizontalBar}></View>
     <View style={styles.formContainer}>
@@ -96,6 +111,9 @@ return (
 export default Register
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    position: "absolute"
+  },
   container: {
     flex: 1,
     alignItems: "center",
