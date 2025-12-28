@@ -8,6 +8,7 @@ import AddProduct from "../../Screens/Products/AddProduct/AddProduct"
 import AddExpense from "../../Screens/Expenses/AddExpense/AddExpense"
 import TabScreens from "../BotomTab/TabScreens"
 import ChangePassword from '../../Screens/Settings/ChangePassword'
+import UpdateInfo from "../../Screens/Settings/UpdateInfo"
 import settings from "../../Screens/Settings/Settings"
 
 const StackScreen = () => {
@@ -22,6 +23,7 @@ const StackScreen = () => {
         <Stack.Screen name='AddProduct' component={AddProduct}/>
         <Stack.Screen name='AddExpense' component={AddExpense}/>
         <Stack.Screen name='ChangePassword' component={ChangePassword}/>
+        <Stack.Screen name='UpdateInfo' component={UpdateInfo}/>
         <Stack.Screen name='Settings' component={settings}/>
         <Stack.Screen name='bottomTabs' component={TabScreens}/>
     </Stack.Navigator>
