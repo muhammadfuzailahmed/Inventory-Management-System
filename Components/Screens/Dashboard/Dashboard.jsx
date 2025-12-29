@@ -113,7 +113,7 @@ const Dashboard = ({ route }) => {
         </View>
       </View>
 
-    <Text style={styles.lowStock}>Low Stock Warning</Text>
+    <Text style={styles.lowStock}>Low Stock Items</Text>
     <View style={styles.horizontalBar}></View>
 
     <View style={styles.lowStockWarningContainer}>
