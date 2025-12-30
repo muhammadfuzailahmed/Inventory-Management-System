@@ -46,8 +46,8 @@ const Dashboard = ({ route }) => {
   }
 
   const calculateTotalProfit = () => {
-    const total = userData?.inventory?.reduce((sum, t) => {
-      return sum + ((t.sellingPrice - t.buyingPrice) * t.quantity)
+    const total = userData?.soldProduct?.reduce((sum, t) => {
+      return sum + t.estimatedProfit
     }, 0)
         setTotalProfit(total);
   }
