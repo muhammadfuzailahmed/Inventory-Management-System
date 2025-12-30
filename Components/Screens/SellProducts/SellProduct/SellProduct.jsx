@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, TextInput, Alert, Modal, ActivityIndicator } fr
 import Button from '../../../UI/Button/Button';
 import Toast from 'react-native-toast-message';
 import SellProductInvoice from "../SellProductInvoice/SellProductInvoice"
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const SellProduct = ({ navigation, route }) => {
   const { user } = route.params || {};
@@ -15,7 +16,7 @@ const SellProduct = ({ navigation, route }) => {
   const [dataFound, setDataFound] = useState(false);
   const [completeProduct, setCompleteProduct] = useState({});
 
-  function handleCancelModal() {
+  function handleBackBtn() {
     setModal(false);
   }
 
@@ -51,23 +52,22 @@ const SellProduct = ({ navigation, route }) => {
     const product = items.find(
       item => item.productName.toLowerCase() === productName.toLowerCase()
     );
-    setCompleteProduct(product);
-    if(quantity > product.quantity) {
+    
+    if (product) {
+      if(quantity > product.quantity) {
       Toast.show({
         type: "error",
         text1: "Insufficient quantity"
       });
       return;
     }
-    if (product) {
+    setCompleteProduct(product);
       setSellItemObj({
-        productName,
-        quantity
+        productName: productName,
+        quantity: quantity
       })
       setDataFound(true);
       setModal(true);
-      setProductName("")
-      setQuantity(0)
     } else {
       Toast.show({
         type: "error",
@@ -87,9 +87,10 @@ const SellProduct = ({ navigation, route }) => {
       </View>
       <Button onPress={handleSellItemBtn} title="Sell Item" />
       <Modal visible={modal} animationType='slide'>
-        <View style={styles.cancelBtn}>
-          <Button onPress={handleCancelModal} title="Cancel" />
-        </View>
+        <Text onPress={handleBackBtn} style={styles.backBtnContainer}>
+          <MaterialIcons name="arrow-back-ios-new" size={28} />
+        </Text>
+        <View style={styles.invoiveHhorizontalBar}></View>
         {dataFound && <SellProductInvoice product={sellItemObj} completeProduct={completeProduct} setModal={setModal} user = {user}/>}
       </Modal>
     </View>
@@ -143,5 +144,19 @@ const styles = StyleSheet.create({
     width: "40%",
     left: -30,
     top: 10
-  }
+  },
+  backBtnContainer: {
+    position: "absolute",
+    top: 15,
+    left: 10
+  },
+  invoiveHhorizontalBar: {
+        position: "absolute",
+        top: 50,
+        left: 10,
+        width: "95%",
+        backgroundColor: "navy",
+        height: 3,
+        marginHorizontal: "auto"
+    }
 });
