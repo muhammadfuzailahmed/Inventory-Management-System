@@ -52,7 +52,7 @@ const SellProductInvoice = ({product, completeProduct, setModal, user}) => {
       </Text>
       <View style={styles.infoBlock}>
         <Text style={styles.textstyle3}>Current Stock: {completeProduct.quantity}</Text>
-        <Text style={styles.textstyle3}>Item Sold: {product.quantity}</Text>
+        <Text style={styles.textstyle3}>Items to be Sold: {product.quantity}</Text>
       </View>
       <View style={styles.container2}>
         <Text style={styles.cont2label1}>Live Calc Area</Text>
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    paddingTop: 40
+    justifyContent: "center"
   },
   infoBlock: {
     width: "100%",
@@ -91,14 +91,12 @@ const styles = StyleSheet.create({
   textstyle: {
     fontSize: 28,
     fontWeight: "900",
-    textAlign: "center",
-    marginTop: 20
+    textAlign: "center"
   },
 
   textstyle3: {
     fontSize: 20,
-    fontWeight: "500",
-    marginTop: 20,
+    fontWeight: "500"
 
   },
 
