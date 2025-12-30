@@ -3,13 +3,14 @@ import React, { useState } from 'react'
 import Button from '../../../UI/Button/Button';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const AddExpense = ({user, showModal, refreshExpenses}) => {
+const AddExpense = ({ user, showModal, refreshExpenses }) => {
   const [title, setTile] = useState("");
   const [category, setCategory] = useState("");
   const [amount, setAmount] = useState("");
 
-  const handleCancelBtn = () => {
+  const handleBackBtn = () => {
     showModal(false);
     refreshExpenses();
   }
@@ -39,7 +40,7 @@ const AddExpense = ({user, showModal, refreshExpenses}) => {
       setTile("");
       setCategory("");
       setAmount("");
-      }).catch((error) => {
+    }).catch((error) => {
       if (error.response) {
         if (error.reponse.status = 404) {
           Toast.show({
@@ -60,20 +61,20 @@ const AddExpense = ({user, showModal, refreshExpenses}) => {
 
   return (
     <Modal animationType='slide'>
-    <View style={styles.container}>
-      <View style={styles.cancelBtnContainer}>
-        <Button onPress={handleCancelBtn} title="Back"/>
+      <View style={styles.container}>
+        <Text onPress={handleBackBtn} style={styles.backBtnContainer}>
+          <MaterialIcons name="arrow-back-ios-new" size={28} />
+        </Text>
+        <Text style={styles.expense}>Add Expense</Text>
+        <View style={styles.horizontalBar}></View>
+        <View style={styles.addExpenseForm}>
+          <TextInput value={title} onChangeText={(e) => setTile(e)} style={styles.input} placeholder='Title' />
+          <TextInput value={category} onChangeText={(e) => setCategory(e)} style={styles.input} placeholder='Category' />
+          <TextInput value={amount} onChangeText={(e) => setAmount(e)} style={styles.input} placeholder='Amount' />
+          {/* <TextInput value={date} onChangeText={(e) => setDate(e)} style={styles.input} placeholder='Data' /> */}
+        </View>
+        <Button onPress={handleAddExpenseBtn} title="Add Expense" />
       </View>
-      <Text style={styles.expense}>Add Expense</Text>
-      <View style={styles.horizontalBar}></View>
-      <View style={styles.addExpenseForm}>
-        <TextInput value={title} onChangeText={(e) => setTile(e)} style={styles.input} placeholder='Title' />
-        <TextInput value={category} onChangeText={(e) => setCategory(e)} style={styles.input} placeholder='Category' />
-        <TextInput value={amount} onChangeText={(e) => setAmount(e)} style={styles.input} placeholder='Amount' />
-        {/* <TextInput value={date} onChangeText={(e) => setDate(e)} style={styles.input} placeholder='Data' /> */}
-      </View>
-      <Button onPress={handleAddExpenseBtn} title="Add Expense" />
-    </View>
     </Modal>
   )
 }
@@ -140,8 +141,12 @@ const styles = StyleSheet.create({
     paddingLeft: 90
   },
   saveexptext: {
-
     fontSize: 24,
     color: '#ffffffff'
+  },
+  backBtnContainer: {
+    position: "absolute",
+    top: 15,
+    left: 10
   }
 })

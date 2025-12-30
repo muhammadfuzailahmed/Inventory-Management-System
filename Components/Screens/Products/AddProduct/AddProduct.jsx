@@ -3,8 +3,9 @@ import React, { useState } from 'react'
 import Button from '../../../UI/Button/Button'
 import Toast from 'react-native-toast-message'
 import axios from 'axios'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const AddProduct = ({ setModal, route, fetchData, user}) => {
+const AddProduct = ({ setModal, route, fetchData, user }) => {
 
   const [productName, setProductName] = useState("");
   const [productCategory, setProductCategory] = useState("");
@@ -14,7 +15,7 @@ const AddProduct = ({ setModal, route, fetchData, user}) => {
   const [productDescription, setProductDescription] = useState("");
   const [isShown, setIsShown] = useState(true);
 
-  const handleCancelBtn = () => {
+  const handleBackBtn = () => {
     setModal(false);
     fetchData();
   }
@@ -27,7 +28,7 @@ const AddProduct = ({ setModal, route, fetchData, user}) => {
       })
       return;
     };
-  const id = user.id;
+    const id = user.id;
     let reponse = await axios.post("http://192.168.100.99:5000/addProduct", {
       productName,
       productCategory,
@@ -61,7 +62,7 @@ const AddProduct = ({ setModal, route, fetchData, user}) => {
         } else if (error.response.status = 401) {
           Toast.show({
             type: "error",
-            text1: "Con't add product!"
+            text1: "Product not found"
           })
         }
       }
@@ -72,23 +73,23 @@ const AddProduct = ({ setModal, route, fetchData, user}) => {
 
   return (
     <Modal animationType='slide'>
-    <View style={styles.container}>
-    <View style={styles.cancelBtnContainer}>
-      <Button onPress={handleCancelBtn} title="Back"/>
-    </View>
-      <Text style={styles.product}>Add New Product </Text>
-      <View style={styles.horizontalBar}></View>
-      <View style={styles.addProdoctForm}>
-        <TextInput value={productName} onChangeText={(e) => setProductName(e)} style={styles.input} placeholder='Product Name' />
-        <TextInput value={productCategory} onChangeText={(e) => setProductCategory(e)} style={styles.input} placeholder='category' />
-        <View style={styles.formFlex}>
-          <TextInput value={buyingPrice} onChangeText={(e) => setBuyingPrice(e)} style={styles.flexInput} placeholder='Buying price' />
-          <TextInput value={sellingPrice} onChangeText={(e) => setSellingPrice(e)} style={styles.flexInput} placeholder='Selling price' />
-        </View>
-        <TextInput value={quantity} onChangeText={(e) => setQuantity(e)} style={styles.input} placeholder='Quantity' />
-        <TextInput value={productDescription} onChangeText={(e) => setProductDescription(e)} style={styles.input} placeholder='Description' /></View>
-      <Button onPress={handleAddProductBtn} title="Add Product" />
-    </View>
+      <View style={styles.container}>
+        <Text onPress={handleBackBtn} style={styles.backBtnContainer}>
+          <MaterialIcons name="arrow-back-ios-new" size={28} />
+        </Text>
+        <Text style={styles.product}>Add New Product </Text>
+        <View style={styles.horizontalBar}></View>
+        <View style={styles.addProdoctForm}>
+          <TextInput value={productName} onChangeText={(e) => setProductName(e)} style={styles.input} placeholder='Product Name' />
+          <TextInput value={productCategory} onChangeText={(e) => setProductCategory(e)} style={styles.input} placeholder='category' />
+          <View style={styles.formFlex}>
+            <TextInput value={buyingPrice} onChangeText={(e) => setBuyingPrice(e)} style={styles.flexInput} placeholder='Buying price' />
+            <TextInput value={sellingPrice} onChangeText={(e) => setSellingPrice(e)} style={styles.flexInput} placeholder='Selling price' />
+          </View>
+          <TextInput value={quantity} onChangeText={(e) => setQuantity(e)} style={styles.input} placeholder='Quantity' />
+          <TextInput value={productDescription} onChangeText={(e) => setProductDescription(e)} style={styles.input} placeholder='Description' /></View>
+        <Button onPress={handleAddProductBtn} title="Add Product" />
+      </View>
     </Modal>
   )
 }
@@ -157,5 +158,10 @@ const styles = StyleSheet.create({
   saveexptext: {
     fontSize: 24,
     color: '#ffffffff'
+  },
+  backBtnContainer: {
+    position: "absolute",
+    top: 15,
+    left: 10
   }
 })
