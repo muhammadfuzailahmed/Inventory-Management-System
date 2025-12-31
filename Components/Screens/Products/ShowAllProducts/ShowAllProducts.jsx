@@ -53,12 +53,12 @@ useFocusEffect(
       <View style={styles.addProductBtnContainer}>
       <Text onPress={handleAddProductBtn} style={styles.addProductBtn}>Add Product</Text>
       </View>
-      <View style={styles.searchProductContainer}>
+      {/* <View style={styles.searchProductContainer}>
         <TextInput style={styles.input} placeholder='Search Product'/>
         <View style={styles.btn}>
         <Button title='🔎'/>
         </View>
-      </View>
+      </View> */}
       <View style={styles.productContainer}>
       {items.length > 0 ? 
     <FlatList 
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   addProductBtnContainer: {
     backgroundColor: "navy",
@@ -111,18 +111,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold"
   },
-  searchProductContainer: {
-    width: "90%",
-    marginHorizontal: "auto",
-    marginTop: 110,
-    flexDirection: "row",
-    position: "relative"
-    
-  },
   productContainer: {
     width: "95%",
     marginHorizontal: "auto",
-    marginTop: 10
+    marginTop: "25%"
   },
   input: {
     borderWidth: 2,
