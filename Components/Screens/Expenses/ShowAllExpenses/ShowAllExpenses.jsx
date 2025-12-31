@@ -1,12 +1,15 @@
 import { StyleSheet, Text, View, FlatList } from 'react-native'
-import React, {useCallback, useEffect, useState} from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Button from '../../../UI/Button/Button'
 import { useFocusEffect } from '@react-navigation/native'
 import { ActivityIndicator } from 'react-native'
 import AddExpense from '../AddExpense/AddExpense'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Toast from 'react-native-toast-message'
+import axios from 'axios'
 
-const ShowAllExpenses = ({navigation, route}) => {
-  const {user} = route.params || {};
+const ShowAllExpenses = ({ navigation, route }) => {
+  const { user } = route.params || {};
 
   const [expenses, setExpenses] = useState([]);
   const [loader, setLoader] = useState(true);
@@ -17,69 +20,102 @@ const ShowAllExpenses = ({navigation, route}) => {
   }
 
   const fetchExpenses = async () => {
-  try {
-    setLoader(true);
-    const res = await fetch(
-      `http://192.168.100.99:5000/expenses/${user.id}`
-    );
-    const data = await res.json();
-    setExpenses(data);
-  } catch (err) {
-    console.log(err);
-  } finally {
-    setLoader(false);
-  }
-};
+    try {
+      setLoader(true);
+      const res = await fetch(
+        `http://192.168.100.99:5000/expenses/${user.id}`
+      );
+      const data = await res.json();
+      setExpenses(data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoader(false);
+    }
+  };
 
+  const handleDeleteBtn = async (item) => {
+    await axios.post("http://192.168.100.99:5000/deleteExpense", {
+      userId: user.id,
+      expenseId: item.ExpenseId,
+      expenseName: item.expenseTitle
+    }).then(() => {
+      Toast.show({
+        type: "success",
+        text1: "Item Deleted Successfully!"
+      });
+      fetchExpenses();
+    }).catch((error) => {
+      if (error.response) {
+        if (error.response.status === 401) {
+          Toast.show({
+            type: "error",
+            text1: "User not found!"
+          });
+        } else if (error.response.status == 404) {
+          Toast.show({
+            type: "error",
+            text1: "Error deleting expense!"
+          });
+        }
+      }
+    })
+    console.log(item.ExpenseId)
+    console.log(user.id)
+  }
 
   useFocusEffect(
     useCallback(() => {
       fetchExpenses();
     }, [])
   );
-  
 
-  return loader ? ( 
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size='large'/>
-      </View> ):
-      (
-        <View>
-      <View style={styles.addProductBtnContainer}>
-      <Button onPress={handleAddExpenseBtn} title="Add Expense"/>
-      </View>
-      <View style={styles.expenseContainer}>
-            {expenses.length > 0 ? 
-          <FlatList 
+
+  return loader ? (
+    <View style={styles.loadingContainer}>
+      <ActivityIndicator size='large' />
+    </View>) :
+    (
+      <View>
+        <View style={styles.addProductBtnContainer}>
+          <Button onPress={handleAddExpenseBtn} title="Add Expense" />
+        </View>
+        <View style={styles.expenseContainer}>
+          {expenses.length > 0 ?
+            <FlatList
               data={expenses}
               keyExtractor={(e) => e._id.toString()}
-              renderItem={({item}) => {
+              renderItem={({ item }) => {
                 return (
                   <View style={styles.expenseCard}>
                     <View style={styles.flex}>
                       <View>
-                      <Text style={styles.expenseTitle}>{item.expenseTitle}</Text>
-                      <View style={styles.cardFlex}>
-                      <Text style={styles.expenseCategory}>{item.expenseCategory}</Text>
-                      <Text>•</Text>
-                      <Text style={styles.expenseDate}>{new Date(item.createdAt).toLocaleDateString("en-GB")}</Text>
+                        <Text style={styles.expenseTitle}>{item.expenseTitle}</Text>
+                        <View style={styles.cardFlex}>
+                          <Text style={styles.expenseCategory}>{item.expenseCategory}</Text>
+                          <Text>•</Text>
+                          <Text style={styles.expenseDate}>{new Date(item.createdAt).toLocaleDateString("en-GB")}</Text>
+                        </View>
                       </View>
+                      <View>
+                        <View style={styles.expenseCardFlex}>
+                          <Text style={styles.expenseAmount}>Rs.{item.expenseAmount}</Text>
+                          <View style={styles.expenseCardVerticalBar}></View>
+                          <Text onPress={() => handleDeleteBtn(item)}><MaterialIcons name='delete' size={23} /></Text>
+                        </View>
                       </View>
-                    <View>
-                      <Text style={styles.expenseAmount}>Rs.{item.expenseAmount}</Text>
                     </View>
-                    </View>
-                    
-                </View>
+
+                  </View>
                 )
               }}
-              />: 
-              <Text>No expenses found!</Text>  
-          }  
-            </View>
-            {showModal && <AddExpense user={user} showModal={setShowModal} refreshExpenses={fetchExpenses}/>}
-    </View>
-      )
+            /> :
+            <Text>No expenses found!</Text>
+          }
+        </View>
+        {showModal && <AddExpense user={user} showModal={setShowModal} refreshExpenses={fetchExpenses} />}
+      </View>
+    )
 }
 
 export default ShowAllExpenses
@@ -114,40 +150,49 @@ const styles = StyleSheet.create({
   //   width: 100
   // },
   expenseCard: {
-  backgroundColor: "#fff",
-  padding: 14,
-  marginVertical: 8,
-  borderRadius: 10,
-  elevation: 5,
-},
-flex: {
-  flexDirection: "row",
-  alignItems: "center",
-  justifyContent: "space-between",
-  marginHorizontal: 10
-},
-cardFlex: {
-  flexDirection: "row",
-  alignItems: "center",
-  gap: 5
-},
-expenseTitle: {
-  fontWeight: "800",
-  fontSize: 18
-},
-expenseCategory: {
-  fontWeight: "bold",
-  fontSize: 15,
-  color: "gray"
-},
-expenseAmount: {
-  fontSize: 15,
-  fontSize: 17,
-  fontWeight: "bold"
-},
-expenseDate: {
-  fontWeight: "bold",
-  fontSize: 15,
-  color: "gray"
-}
+    backgroundColor: "#fff",
+    padding: 14,
+    marginVertical: 8,
+    borderRadius: 10,
+    elevation: 5,
+  },
+  flex: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginHorizontal: 10
+  },
+  cardFlex: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5
+  },
+  expenseTitle: {
+    fontWeight: "800",
+    fontSize: 18
+  },
+  expenseCategory: {
+    fontWeight: "bold",
+    fontSize: 15,
+    color: "gray"
+  },
+  expenseAmount: {
+    fontSize: 15,
+    fontSize: 17,
+    fontWeight: "bold"
+  },
+  expenseDate: {
+    fontWeight: "bold",
+    fontSize: 15,
+    color: "gray"
+  },
+  expenseCardVerticalBar: {
+    height: "100%",
+    width: 3,
+    backgroundColor: "black"
+  },
+  expenseCardFlex: {
+    flexDirection: "row",
+    gap: 10
+  }
 })
