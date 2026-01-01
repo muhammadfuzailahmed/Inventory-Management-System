@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Feather from 'react-native-vector-icons/Feather';
 import Button from '../../UI/Button/Button';
 
 const Settings = ({route, navigation}) => {
@@ -75,7 +76,7 @@ const Settings = ({route, navigation}) => {
 
           <View style={styles.accountCard}>
             <View style={styles.flex}>
-              <FontAwesome name="user" size={23} />
+              <Feather name="info" size={23} />
               <Text style={styles.accountCardText}>App Version</Text>
             </View>
             <View>
