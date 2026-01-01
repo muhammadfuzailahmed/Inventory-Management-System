@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Alert, Modal, ActivityIndicator } from 'react-native';
 import Button from '../../../UI/Button/Button';
 import Toast from 'react-native-toast-message';
 import SellProductInvoice from "../SellProductInvoice/SellProductInvoice"
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { useFocusEffect } from '@react-navigation/native';
 
 const SellProduct = ({ navigation, route }) => {
   const { user } = route.params || {};
@@ -28,8 +29,14 @@ const SellProduct = ({ navigation, route }) => {
       });
       return;
     }
-    fetchProductData();
+    handleBtn();
   }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchProductData();
+    })
+  )
 
   const fetchProductData = async () => {
     try {
@@ -49,6 +56,10 @@ const SellProduct = ({ navigation, route }) => {
       console.log("Fetch error:", err);
     }
 
+    
+  }
+
+  const handleBtn = () => {
     const product = items.find(
       item => item.productName.toLowerCase() === productName.toLowerCase()
     );
