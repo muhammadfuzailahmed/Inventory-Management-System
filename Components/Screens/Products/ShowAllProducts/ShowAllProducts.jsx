@@ -100,7 +100,7 @@ const ShowAllProducts = ({ navigation, route }) => {
           }
         </View>
         {showModal && <AddProduct setModal={setShowModal} fetchData={fetchProducts} user={user} />}
-        {showEditProductModal && <EditProduct product={updateInfoProduct} setModal={setShowEditProductModal}/>}
+        {showEditProductModal && <EditProduct product={updateInfoProduct} setModal={setShowEditProductModal} user={user} fetchData={fetchProducts} />}
       </View>
     )
 }
