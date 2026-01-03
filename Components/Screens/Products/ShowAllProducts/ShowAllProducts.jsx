@@ -1,90 +1,108 @@
-import {  FlatList, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { FlatList, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useFocusEffect } from '@react-navigation/native';
 import Button from '../../../UI/Button/Button';
 import { ActivityIndicator } from 'react-native';
 import AddProduct from '../AddProduct/AddProduct';
+import Feather from 'react-native-vector-icons/Feather';
+import EditProduct from "../EditProduct/EditProduct"
 
-const ShowAllProducts = ({navigation, route}) => {
-  const {user} = route.params || {};  
+const ShowAllProducts = ({ navigation, route }) => {
+  const { user } = route.params || {};
   const [items, setItems] = useState([]);
   const [loader, setLoader] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [showEditProductModal, setShowEditProductModal] = useState(false);
+  const [updateInfoProduct, setUpdateInfoProduct] = useState({});
 
   const handleAddProductBtn = () => {
     setShowModal(true);
   }
 
-const fetchProducts = async () => {
-      try {
-        const res = await fetch(
-          `http://192.168.100.99:5000/products/${user.id}`
-        );
-        setLoader(false);
-        if (!res.ok) {
-          const err = await res.text();
-          console.log("Backend error:", err);
-          return;
-        }
-
-        const data = await res.json();
-        setItems(data);
-
-      } catch (err) {
-        console.log("Fetch error:", err);
+  const fetchProducts = async () => {
+    try {
+      const res = await fetch(
+        `http://192.168.100.99:5000/products/${user.id}`
+      );
+      setLoader(false);
+      if (!res.ok) {
+        const err = await res.text();
+        console.log("Backend error:", err);
+        return;
       }
-    };
 
-useFocusEffect(
-  useCallback(() => {
-    fetchProducts();
-  }, [])
-);
+      const data = await res.json();
+      setItems(data);
 
+    } catch (err) {
+      console.log("Fetch error:", err);
+    }
+  };
 
+  useFocusEffect(
+    useCallback(() => {
+      fetchProducts();
+    }, [])
+  );
+
+  const handleEditProductBtn = (item) => {
+    console.log(item);
+    setShowEditProductModal(true);
+    setUpdateInfoProduct(item);
+  }
 
   return loader ? (
     <View style={styles.loadingContainer}>
-      <ActivityIndicator size="large"/>
+      <ActivityIndicator size="large" />
     </View>
-  ) : 
-  (
-    <View>
-      <View style={styles.addProductBtnContainer}>
-      <Text onPress={handleAddProductBtn} style={styles.addProductBtn}>Add Product</Text>
-      </View>
-      {/* <View style={styles.searchProductContainer}>
+  ) :
+    (
+      <View>
+        <View style={styles.addProductBtnContainer}>
+          <Text onPress={handleAddProductBtn} style={styles.addProductBtn}>Add Product</Text>
+        </View>
+        {/* <View style={styles.searchProductContainer}>
         <TextInput style={styles.input} placeholder='Search Product'/>
         <View style={styles.btn}>
         <Button title='🔎'/>
         </View>
       </View> */}
-      <View style={styles.productContainer}>
-      {items.length > 0 ? 
-    <FlatList 
-        data={items}
-        keyExtractor={(p) => p._id.toString()}
-        renderItem={({item}) => {
-          return (
-            <View style={styles.productCard}>
-              <View style={styles.flex}>
-                <Text style={styles.productTitle}>{item.productName}</Text>
-                <Text style={styles.productQuantity}>Qty: {item.quantity}</Text>
-              </View>
-              <View style={styles.flex}>
-                <Text style={styles.productCategory}>{item.productCategory}</Text>
-                <Text style={styles.productPrice}>Price: Rs.{item.sellingPrice}</Text>
-              </View>
-          </View>
-          )
-        }}
-        />: 
-        <Text>No products found!</Text>  
-    }  
+        <View style={styles.productContainer}>
+          {items.length > 0 ?
+            <FlatList
+              data={items}
+              keyExtractor={(p) => p._id.toString()}
+              renderItem={({ item }) => {
+                return (
+                  <View style={styles.productCard}>
+                    <View style={styles.flex}>
+                      <View>
+                        <Text style={styles.productTitle}>{item.productName}</Text>
+                        <Text style={styles.productCategory}>{item.productCategory}</Text>
+                      </View>
+
+                      <View style={styles.cardInnerFlex}>
+
+                        <View>
+                          <Text style={styles.productQuantity}>Qty: {item.quantity}</Text>
+                          <Text style={styles.productPrice}>Price: Rs.{item.sellingPrice}</Text>
+                        </View>
+                        <View style={styles.productCardVerticalBar}></View>
+                        <Text onPress={() => handleEditProductBtn(item)}><Feather name="edit" size={23} /></Text>
+                      </View>
+
+                    </View>
+                  </View>
+                )
+              }}
+            /> :
+            <Text>No products found!</Text>
+          }
+        </View>
+        {showModal && <AddProduct setModal={setShowModal} fetchData={fetchProducts} user={user} />}
+        {showEditProductModal && <EditProduct product={updateInfoProduct} setModal={setShowEditProductModal}/>}
       </View>
-    {showModal && <AddProduct setModal={setShowModal} fetchData={fetchProducts} user={user}/>}
-    </View>
-  )
+    )
 }
 
 export default ShowAllProducts
@@ -129,32 +147,48 @@ const styles = StyleSheet.create({
     width: 100
   },
   productCard: {
-  backgroundColor: "#fff",
-  padding: 14,
-  marginVertical: 8,
-  borderRadius: 10,
-  elevation: 5,
-},
-flex: {
-  flexDirection: "row",
-  alignItems: "center",
-  justifyContent: "space-between",
-  marginHorizontal: 10
-},
-productTitle: {
-  fontWeight: "800",
-  fontSize: 18
-},
-productQuantity: {
-  fontWeight: "bold",
-  fontSize: 15
-},
-productCategory: {
-  fontSize: 15,
-  color: "gray"
-},
-productPrice: {
-  fontWeight: "bold",
-  fontSize: 15
-}
+    backgroundColor: "#fff",
+    paddingVertical: 14,
+    paddingHorizontal: 10,
+    marginVertical: 8,
+    borderRadius: 10,
+    elevation: 5,
+  },
+  flex: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
+  },
+  productTitle: {
+    fontWeight: "800",
+    fontSize: 18
+  },
+  productQuantity: {
+    fontWeight: "bold",
+    fontSize: 15,
+    textAlign: "right"
+  },
+  productCategory: {
+    fontSize: 15,
+    color: "gray"
+  },
+  productPrice: {
+    fontWeight: "bold",
+    fontSize: 15,
+    textAlign: "right"
+  },
+  cardRight: {
+    width: "30%"
+  },
+  productCardVerticalBar: {
+    height: "100%",
+    width: 3,
+    backgroundColor: "black"
+  },
+  cardInnerFlex: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    height: "100%"
+  }
 })
