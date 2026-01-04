@@ -70,7 +70,6 @@ const UpdateInfo = ({ navigation }) => {
             <Text onPress={handleBackBtn} style={styles.backBtnContainer}>
                 <MaterialIcons name="arrow-back-ios-new" size={28} />
             </Text>
-            <View style={styles.horizontalBar}></View>
             <Text style={styles.heading}>Update Info</Text>
             <View style={styles.horizontalBarHeading}></View>
 
@@ -160,14 +159,5 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: 60,
         left: 10
-    },
-    horizontalBar: {
-        position: "absolute",
-        top: 95,
-        left: 10,
-        width: "95%",
-        backgroundColor: "navy",
-        height: 3,
-        marginHorizontal: "auto"
     }
 })

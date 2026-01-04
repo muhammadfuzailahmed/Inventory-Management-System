@@ -42,7 +42,6 @@ const OrderHistory = ({navigation}) => {
       <Text onPress={handleBackBtn} style={styles.backBtnContainer}>
         <MaterialIcons name="arrow-back-ios-new" size={28} />
       </Text>
-      <View style={styles.horizontalBar}></View>
       {
       userData?.soldProduct?.length > 0 
       ?
@@ -94,14 +93,8 @@ const styles = StyleSheet.create({
     fontWeight: "500"
   },
   backBtnContainer: {
-    marginLeft: 5
-  },
-  horizontalBar: {
-    width: "95%",
-    backgroundColor: "navy",
-    height: 3,
-    marginHorizontal: "auto",
-    marginVertical: 10
+    marginLeft: 5,
+    marginBottom: 10
   },
   noProductFound: {
     textAlign: "center",
