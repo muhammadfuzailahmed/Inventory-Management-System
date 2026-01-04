@@ -79,6 +79,8 @@ const SellProduct = ({ navigation, route }) => {
       })
       setDataFound(true);
       setModal(true);
+      setProductName("");
+      setQuantity(0);
     } else {
       Toast.show({
         type: "error",
@@ -90,7 +92,7 @@ const SellProduct = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.textstyle}>List A New Product</Text>
+      <Text style={styles.textstyle}>Sell Product</Text>
       <View style={styles.horizontalBar}></View>
       <View style={styles.inputStyles2}>
         <TextInput value={productName} onChangeText={(e) => setProductName(e)} placeholder='Enter Product here' style={styles.input} />
@@ -145,7 +147,7 @@ const styles = StyleSheet.create({
 
   horizontalBar: {
     backgroundColor: "navy",
-    width: "50%",
+    width: "30%",
     height: 6,
     borderRadius: 25,
     marginBottom: 10
