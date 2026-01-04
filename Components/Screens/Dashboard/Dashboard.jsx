@@ -250,7 +250,9 @@ productQuantity:{
   color: "#fff",
   paddingVertical: 6,
   paddingHorizontal: 12,
-  borderRadius: 50
+  borderRadius: 50,
+  width: "28%",
+  textAlign: "center"
 },
 flex: {
   flexDirection:"row",
