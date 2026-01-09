@@ -11,6 +11,7 @@ import ChangePassword from '../../Screens/Settings/ChangePassword'
 import UpdateInfo from "../../Screens/Settings/UpdateInfo"
 import OrderHistory from "../../Screens/Settings/OrderHistory"
 import settings from "../../Screens/Settings/Settings"
+import forgotPassword from "../../Authentication/ForgotPassword/ForgotPassword"
 
 const StackScreen = () => {
 
@@ -28,6 +29,7 @@ const StackScreen = () => {
         <Stack.Screen name='OrderHistory' component={OrderHistory}/>
         <Stack.Screen name='Settings' component={settings}/>
         <Stack.Screen name='bottomTabs' component={TabScreens}/>
+        <Stack.Screen name='forgotPassword' component={forgotPassword}/>
     </Stack.Navigator>
   )
 }
