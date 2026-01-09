@@ -5,7 +5,6 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { ActivityIndicator } from 'react-native';
 import tick from "../../Assets/tick.png"
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Button from '../../UI/Button/Button';
 
 
 const OrderHistory = ({ navigation }) => {
