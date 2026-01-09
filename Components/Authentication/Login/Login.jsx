@@ -1,14 +1,19 @@
-import { ActivityIndicator, Alert, StyleSheet, Text, TextInput, View } from 'react-native'
+import { ActivityIndicator, Alert, Modal, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Button from "../../UI/Button/Button"
 import axios from 'axios'
 import Toast from 'react-native-toast-message'
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loader, setLoader] = useState(false);
-  
+
+  const handleForgotPassswordBtn = async () => {
+    navigation.navigate("forgotPassword")
+  }
+
   const handleLoginBtn = async () => {
     try {
       setLoader(true);
@@ -50,6 +55,8 @@ const Login = ({navigation}) => {
     navigation.replace("register");
   }
 
+  
+
   return (
     <View style={styles.container}>
     {loader
@@ -63,6 +70,7 @@ const Login = ({navigation}) => {
       <View style={styles.formContainer}>
         <TextInput value={email} onChangeText={(e) => setEmail(e)} style={styles.input} placeholder='Enter Email'/>
         <TextInput value={password} onChangeText={(e) => setPassword(e)} secureTextEntry={true} style={styles.input} placeholder='Enter Password'/>
+        <Text onPress={handleForgotPassswordBtn} style={styles.forgotPass}>Forgot Password?</Text>
         <Button onPress={handleLoginBtn} title="Login"/>
         <View style={styles.flex}>
           <Text>Don't have an account? </Text>
@@ -114,5 +122,22 @@ flex: {
 underline: {
   textDecorationLine: "underline",
   fontWeight: "bold"
-}
+},
+forgotPass: {
+  color: "red",
+  textAlign: "right",
+  textDecorationLine: "underline",
+  fontWeight: "bold",
+  marginBottom :10
+},
+close: {
+    textAlign: "right",
+    marginTop: 10,
+    marginRight: 10
+  },
+  forgotPassHorizontalBar: {
+    width: "45%",
+    height: 5,
+    backgroundColor: "navy"  
+  }
 })
