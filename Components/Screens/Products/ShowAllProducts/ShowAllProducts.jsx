@@ -1,11 +1,13 @@
 import { FlatList, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useFocusEffect } from '@react-navigation/native';
-import Button from '../../../UI/Button/Button';
 import { ActivityIndicator } from 'react-native';
 import AddProduct from '../AddProduct/AddProduct';
 import Feather from 'react-native-vector-icons/Feather';
 import EditProduct from "../EditProduct/EditProduct"
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Toast from 'react-native-toast-message';
+import axios from 'axios';
 
 const ShowAllProducts = ({ navigation, route }) => {
   const { user } = route.params || {};
@@ -14,6 +16,11 @@ const ShowAllProducts = ({ navigation, route }) => {
   const [showModal, setShowModal] = useState(false);
   const [showEditProductModal, setShowEditProductModal] = useState(false);
   const [updateInfoProduct, setUpdateInfoProduct] = useState({});
+  const [searchContainer, setSearchContainer] = useState(false);
+  const [searchResult, setSearchResult] = useState(false);
+  const [search, setSearch] = useState("");
+  const [searchProduct, setSearchProduct] = useState();
+  const [searchContainerLoader, setSearchContainerLoader] = useState(false);
 
   const handleAddProductBtn = () => {
     setShowModal(true);
@@ -51,6 +58,46 @@ const ShowAllProducts = ({ navigation, route }) => {
     setUpdateInfoProduct(item);
   }
 
+  const handleSearchInput = () => {
+    setSearchContainer(true);
+  }
+
+  const handleSearchContainerCloseBtn = () => {
+    setSearchContainer(false);
+    setSearchResult(false);
+    setSearch("");
+  }
+
+  const handleSearchBtn = async () => {
+    if(!search) {
+      Toast.show({
+        type: 'error',
+        text1: "Cannot search empty field"
+      });
+      return;
+    }
+    setSearchContainerLoader(true);
+    try {
+      const response = await axios.post("http://192.168.100.99:5000/searchProduct", {
+        search,
+        id: user.id
+      })
+      
+      setSearchProduct(response.data.product);
+      setSearchContainerLoader(false);
+      setSearchResult(true);
+    } catch (error) {
+      let status = error.response?.status;
+      
+      if(status === 404) {
+        Toast.show({
+          type: "error",
+          text1: "Produt not found!"
+        })
+      }
+    }
+  }
+
   return loader ? (
     <View style={styles.loadingContainer}>
       <ActivityIndicator size="large" />
@@ -61,12 +108,51 @@ const ShowAllProducts = ({ navigation, route }) => {
         <View style={styles.addProductBtnContainer}>
           <Text onPress={handleAddProductBtn} style={styles.addProductBtn}>Add Product</Text>
         </View>
-        {/* <View style={styles.searchProductContainer}>
-        <TextInput style={styles.input} placeholder='Search Product'/>
-        <View style={styles.btn}>
-        <Button title='🔎'/>
+        {
+          searchContainer 
+          &&
+        <View style={styles.searchProductContainer}>
+          <Text onPress={handleSearchContainerCloseBtn} style={styles.searchProductCloseBtn}>
+            <AntDesign name="close" size={28}/>
+          </Text>
+          {searchResult 
+          &&
+          <View style={styles.searchProductInnerContainer}>
+          {searchContainerLoader 
+          ? 
+          <ActivityIndicator size="large"/>
+          : 
+            <View style={styles.productCard}>
+                    <View style={styles.flex}>
+                      <View>
+                        <Text style={styles.productTitle}>{searchProduct.productName}</Text>
+                        <Text style={styles.productCategory}>{searchProduct.productCategory}</Text>
+                      </View>
+
+                      <View style={styles.cardInnerFlex}>
+
+                        <View>
+                          <Text style={styles.productQuantity}>Qty: {searchProduct.quantity}</Text>
+                          <Text style={styles.productPrice}>Price: Rs. {searchProduct.sellingPrice}</Text>
+                        </View>
+                        {/* <View style={styles.productCardVerticalBar}></View> */}
+                        {/* <Text onPress={() => handleEditProductBtn(item)}><Feather name="edit" size={23} /></Text> */}
+                      </View>
+
+                    </View>
+                  </View>
+          }
+          
+            </View>          
+          }
         </View>
-      </View> */}
+        }
+
+
+      <View style={styles.searchContainer}>
+          <TextInput value={search} onChangeText={(e) => setSearch(e)} onPress={handleSearchInput} style={styles.input} placeholder='Search Product'/>
+          <Text onPress={handleSearchBtn} style={styles.searchBtn}><Feather name="search" size={30}/></Text>
+      </View>
         <View style={styles.productContainer}>
           {items.length > 0 ?
             <FlatList
@@ -132,14 +218,15 @@ const styles = StyleSheet.create({
   productContainer: {
     width: "95%",
     marginHorizontal: "auto",
-    marginTop: "25%"
+    marginTop: 10,
+    zIndex: -1
   },
   input: {
     borderWidth: 2,
     borderColor: "black",
     borderRadius: 6,
     paddingLeft: 8,
-    width: "100%"
+    width: "100%",
   },
   btn: {
     position: "absolute",
@@ -190,5 +277,33 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 10,
     height: "100%"
+  },
+  searchContainer: {
+    width: "95%",
+    marginHorizontal: "auto",
+    marginTop: "25%",
+    flexDirection: "row",
+  },
+  searchBtn: {
+    position:"absolute",
+    right: 10,
+    top: 7
+  },
+  searchProductContainer: {
+    position: "absolute",
+    width: "100%",
+    backgroundColor: "white",
+    marginTop: "38%",
+    height: "100%"
+  },
+  searchProductCloseBtn: {
+    position: "absolute",
+    right: 10,
+    top: 5,
+  },
+  searchProductInnerContainer: {
+    width: "95%",
+    marginHorizontal: "auto",
+    marginTop: 40
   }
 })
