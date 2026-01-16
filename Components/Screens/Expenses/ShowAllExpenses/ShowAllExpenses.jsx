@@ -80,6 +80,7 @@ const ShowAllExpenses = ({ navigation, route }) => {
         <View style={styles.addProductBtnContainer}>
           <Button onPress={handleAddExpenseBtn} title="Add Expense" />
         </View>
+
         <View style={styles.expenseContainer}>
           {expenses.length > 0 ?
             <FlatList
@@ -137,18 +138,6 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
     marginTop: 110
   },
-  // input: {
-  //   borderWidth: 2,
-  //   borderColor: "black",
-  //   borderRadius: 6,
-  //   paddingLeft: 8,
-  //   width: "100%"
-  // },
-  // btn: {
-  //   position: "absolute",
-  //   right: -25,
-  //   width: 100
-  // },
   expenseCard: {
     backgroundColor: "#fff",
     padding: 14,
@@ -194,5 +183,5 @@ const styles = StyleSheet.create({
   expenseCardFlex: {
     flexDirection: "row",
     gap: 10
-  }
+  },
 })
