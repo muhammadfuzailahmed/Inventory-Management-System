@@ -1,9 +1,8 @@
-import { ActivityIndicator, Alert, Modal, StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { ActivityIndicator, StyleSheet, Text, TextInput, View } from 'react-native'
+import React, { useState } from 'react'
 import Button from "../../UI/Button/Button"
 import axios from 'axios'
 import Toast from 'react-native-toast-message'
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState("");
